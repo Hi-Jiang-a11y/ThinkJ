@@ -1,0 +1,2 @@
+# ThinkJ
+My thinkpad configure
