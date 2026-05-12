@@ -1,0 +1,22 @@
+"query:Unread Articles:unread = \"yes\""
+
+# [Archlinux]
+https://archlinux.org/feeds/news/ "~Arch Linux" archlinux distro
+https://www.archlinuxcn.org/feed/ "~Arch Linux CN" archlinux distro
+
+# [Blogs]
+https://lukesmith.xyz/rss.xml "~Luke Smith" blog
+
+# [Friend Links]
+# myself
+https://neojulietblog.netlify.app/rss.xml
+# a-moment
+https://a-moment096.github.io/index.xml
+# lhz-07
+https://lhz07.com/index.xml
+# ex-tasty
+https://ex-tasty.com/rss.xml
+# cloverta
+https://blog.cloverta.top/rss.xml
+# mikeogilvy
+https://mikeogilvy.github.io/blog/index.xml
