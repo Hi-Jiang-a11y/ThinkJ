@@ -1,4 +1,9 @@
 # vim:ft=conf
+# lf/icons
+# @author nate zhou
+# @since 2025,2026
+# @depends ttf-nerd-fonts-symbols
+# @modified by NeoJuliet (2026)
 
 # These examples require Nerd Fonts or a compatible font to be used.
 # See https://www.nerdfonts.com for more information.

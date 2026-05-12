@@ -1,3 +1,9 @@
+-- vim:ft=lua
+-- nvim/init.lua
+-- @author nate zhou
+-- @since 2025
+-- @modified by NeoJuliet (2026)
+
 require('config.juliet')
 require('config.options')
 require('config.bindings')
