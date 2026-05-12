@@ -27,15 +27,6 @@ The repository is organized into packages compatible with `GNU Stow`:
 - `waybar/` & `fuzzel/`: UI components themed with the Juliet Pink palette.
 - `lf/`: Terminal file manager with custom icons and keybindings.
 
-## Usage
-```bash
-# e.g., configure nvim
-stow nvim
-# remove configure
-stow -D nvim
-```
-
-## Overview
 ```
 .
 ├── calcurse
@@ -103,3 +94,12 @@ stow -D nvim
             ├── config.jsonc
             └── style.css
 ```
+
+## Usage
+```bash
+# e.g., configure nvim
+stow nvim
+# remove configure
+stow -D nvim
+```
+
