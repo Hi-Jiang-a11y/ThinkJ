@@ -1,3 +1,9 @@
+-- vim:ft=lua
+-- nvim/lua/config/options.lua
+-- @author nate zhou
+-- @since 2025,2026
+-- @modified by NeoJuliet (2026)
+
 vim.o.encoding = 'utf-8' -- global encoding
 
 vim.o.timeoutlen = 300

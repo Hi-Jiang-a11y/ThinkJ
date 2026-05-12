@@ -1,3 +1,8 @@
+# @author nate zhou
+# @since 2023,2024,2025
+# newsboat/config
+# @modified by NeoJuliet (2026)
+
 include "~/.config/newsboat/colors.conf"
 include "~/.config/newsboat/bindings.conf"
 

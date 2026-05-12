@@ -1,3 +1,8 @@
+-- vim:ft=lua
+-- nvim/lua/config/options.lua
+-- @author nate zhou
+-- @since 2025,2026
+
 vim.cmd.highlight('clear')
 vim.g.colors_name = 'juliet'
 
