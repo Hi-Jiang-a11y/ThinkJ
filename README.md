@@ -19,7 +19,7 @@ I have modified these files to fit my personal workflow, including some specific
 - **Utility**: `Fuzzel` (Launcher), `Waybar` (Status bar), `Newsboat` (RSS), `Calcurse` (Calendar)
 
 ## Appearance
-![preview](SS2026_05_13_19:57:50.png)
+![preview](./SS2026_05_13_19:57:50.png)
 
 ## Structure Overview
 The repository is organized into packages compatible with `GNU Stow`:
