@@ -28,10 +28,6 @@
                 ["<Tab>"] = cmp.mapping(function(fallback)
                     return cmp.visible() and cmp.confirm({ select = true }) or fallback()
                 end, { "i", "s" }),
-
-                ["<Space>"] = cmp.mapping(function(fallback)
-                    return cmp.visible() and cmp.abort() or fallback()
-                end, { "i", "s" }),
             }),
             sources = {
                 { name = "nvim_lsp" },
