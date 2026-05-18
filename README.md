@@ -19,11 +19,11 @@ I have modified these files to fit my personal workflow, including some specific
 - **Utility**: `Fuzzel` (Launcher), `Waybar` (Status bar), `Newsboat` (RSS), `Calcurse` (Calendar)
 
 ## Appearance
-![preview](./overview.webp)
+![preview](./screenshots/overview.webp)
 + nvim
-![preview](./nvim.webp)
+![preview](./screenshots/nvim.webp)
 + lf
-![preview](./lf.webp)
+![preview](./screenshots/lf.webp)
 + swaylock
 + fuzzel
 + calcurse
