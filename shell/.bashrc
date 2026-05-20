@@ -33,3 +33,5 @@ alias free="free -h"
 alias lsblk="lsblk -o name,mountpoints,type,size"
 
 alias minecraft='hmcl'
+
+export PICO_SDK_PATH="/usr/share/pico-sdk"
