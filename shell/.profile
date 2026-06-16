@@ -25,9 +25,8 @@ export CALCHISTFILE="$XDG_CACHE_HOME/calc_history"
 export GOPATH="$XDG_DATA_HOME/go"
 export GOMODCACHE="$XDG_CACHE_HOME/go/mod"
 
-export QT_QPA_PLATFORMTHEME=gtk3 # qt theme
-export QT_STYLE_OVERRIDE=adwaita-dark # qt theme
 export SAL_USE_VCLPLUGIN=gtk3
+export QT_QPA_PLATFORMTHEME=qt6ct
 
 export _JAVA_AWT_WM_NONREPARENTING=1 # fix java blank window in xwayland-satellite
 
