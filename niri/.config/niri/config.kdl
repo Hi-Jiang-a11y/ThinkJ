@@ -252,6 +252,9 @@ spawn-at-startup "dunst"
 // This line starts fcitx5
 spawn-at-startup "fcitx5"
 
+// nirimap(AUR)
+spawn-at-startup "nirimap"
+
 // Set wallpaper
 spawn-sh-at-startup "swaybg -i /home/Juliet/.local/share/wallpaper2.JPG -m fill"
 
