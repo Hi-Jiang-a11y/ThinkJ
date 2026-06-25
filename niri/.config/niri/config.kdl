@@ -94,8 +94,7 @@ output "eDP-1" {
 // Settings that influence how windows are positioned and sized.
 layout {
     // Set gaps around windows in logical pixels.
-    gaps 6
-
+    gaps 0
     // When to center a column when changing focus, options are:
     // - "never", default behavior, focusing an off-screen column will keep at the left
     //   or right edge of the screen.
@@ -135,12 +134,12 @@ layout {
     // Alternatively, you can override it with a window rule called
     // `draw-border-with-background`.
 
-    // You can change how the focus ring looks.
+    // {{{  Focus Ring
     focus-ring {
-        // off
+        off
 
         // How many logical pixels the ring extends out from the windows.
-        width 4
+        width 5
 
         // Color of the ring on the active monitor.
         active-color "#EB59B6"
@@ -166,15 +165,15 @@ layout {
         //
         // inactive-gradient from="#505050" to="#808080" angle=45 relative-to="workspace-view"
     }
-
-    // You can also add a border. It's similar to the focus ring, but always visible.
+    //}}}
+    // {{{ Border
     border {
         // The settings are the same as for the focus ring.
         // If you enable the border, you probably want to disable the focus ring.
-        off
+        // off
 
         width 4
-        active-color "#ffc87f"
+        active-color "#ffb6c1"
         inactive-color "#505050"
 
         // Color of the border around windows that request your attention.
@@ -187,7 +186,7 @@ layout {
 
         // inactive-gradient from="#505050" to="#808080" angle=45 relative-to="workspace-view"
     }
-
+    // }}}
     // You can enable drop shadows for windows.
     shadow {
         // Uncomment the next line to enable shadows.
@@ -233,6 +232,7 @@ layout {
     struts {
         // left 64
         // right 64
+        top -1
         // top 64
         // bottom 64
     }
@@ -327,7 +327,7 @@ window-rule {
 
 // Enable rounded corners for all windows.
 window-rule {
-    geometry-corner-radius 6
+    geometry-corner-radius 0
     clip-to-geometry true
 }
 
