@@ -1,0 +1,9 @@
+[Desktop Entry]
+  Type=Application
+  Name=Neovim in Kitty
+  Comment=Edit files with Neovim in Kitty
+  TryExec=kitty
+  Exec=kitty --class nvim -e nvim %F
+  Icon=nvim
+  Terminal=false
+  Categories=Utility;TextEditor;Development;

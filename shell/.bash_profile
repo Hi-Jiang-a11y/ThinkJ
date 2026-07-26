@@ -12,6 +12,8 @@ path_prepend() {
 export PATH
 unset -f path_prepend
 
+[[ -r "$HOME/.bashrc" ]] && . "$HOME/.bashrc"
+
 export EDITOR="nvim"
 export VISUAL="nvim"
 export BROWSER="firefox"
@@ -20,6 +22,9 @@ export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_CACHE_HOME="$HOME/.cache"
 export XDG_DATA_HOME="$HOME/.local/share"
 export XDG_STATE_HOME="$HOME/.local/state"
+
+export npm_config_cache="$XDG_CACHE_HOME/npm"
+export OLLAMA_MODELS="$XDG_DATA_HOME/ollama/models"
 
 export HISTFILE="$XDG_STATE_HOME/bash/history"
 export HISTIGNORE="lf:cd ..:pwd:ls:exit"
@@ -36,4 +41,3 @@ if [[ -d /usr/share/pico-sdk ]]; then
     export PICO_SDK_PATH=/usr/share/pico-sdk
 fi
 
-[[ -r "$HOME/.bashrc" ]] && . "$HOME/.bashrc"
