@@ -1,0 +1,3 @@
+com.github.reds.LogisimEvolution
+io.typora.Typora
+org.telegram.desktop
