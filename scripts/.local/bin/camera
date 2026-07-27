@@ -1,0 +1,4 @@
+#!/usr/bin/sh
+# play the camera with mpv
+
+mpv --profile=low-latency --untimed /dev/video0

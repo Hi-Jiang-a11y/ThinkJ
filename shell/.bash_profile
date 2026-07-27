@@ -12,7 +12,6 @@ path_prepend() {
 export PATH
 unset -f path_prepend
 
-[[ -r "$HOME/.bashrc" ]] && . "$HOME/.bashrc"
 
 export EDITOR="nvim"
 export VISUAL="nvim"
@@ -41,3 +40,4 @@ if [[ -d /usr/share/pico-sdk ]]; then
     export PICO_SDK_PATH=/usr/share/pico-sdk
 fi
 
+[[ -r "$HOME/.bashrc" ]] && . "$HOME/.bashrc"

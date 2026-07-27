@@ -1,0 +1,26 @@
+#!/bin/bash
+# This script is used for printing some basic info of the mechine
+
+kernel_info=$(uname -r)
+pacman_info=$(pacman -Q | wc -l)
+uptime_info=$(uptime -p | sed 's/up //; s/ day/d/; s/ hours/h/; s/ minutes/min/')
+memory_info=$(free -h | awk 'NR==2 {print $3 " / " $2}')
+swap_info=$(free -h | awk 'NR==3 {print $3 " / " $2}')
+
+
+print_colors () {
+    printf "Colors:      "
+    for i in {0..15};do
+        printf "\e[48;5;${i}m \e[0m"
+        if [ $((($i + 1) % 16)) -eq 0 ]; then
+            printf "\n\n"
+        fi
+    done
+}
+
+echo "Kernel:      $kernel_info"
+echo "Packages:    $pacman_info"
+echo "Uptime:      $uptime_info"
+echo "Memory:      $memory_info"
+echo "Swap:        $swap_info"
+print_colors
