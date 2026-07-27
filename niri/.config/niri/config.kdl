@@ -252,6 +252,10 @@ spawn-at-startup "dunst"
 // This line starts fcitx5
 spawn-at-startup "fcitx5"
 
+// Keep text and image clipboard history, then update Waybar's CLIP count.
+spawn-sh-at-startup "wl-paste --type text --watch sh -c 'cliphist store && pkill -RTMIN+8 -x waybar'"
+spawn-sh-at-startup "wl-paste --type image --watch sh -c 'cliphist store && pkill -RTMIN+8 -x waybar'"
+
 // nirimap(AUR)
 spawn-at-startup "nirimap"
 
@@ -450,6 +454,11 @@ binds {
     Mod+Shift+U         { move-workspace-down; }
     Mod+Shift+I         { move-workspace-up; }
 
+    Mod+Shift+V hotkey-overlay-title="Clipboard History" {
+        spawn-sh "selection=$(cliphist list | fuzzel --dmenu --with-nth=2 --no-run-if-empty
+        --prompt='Clipboard> '); [ -n \"$selection\" ] && printf '%s' \"$selection\" | cliphist decode |
+        wl-copy"
+    }
     // You can bind mouse wheel scroll ticks using the following syntax.
     // These binds will change direction based on the natural-scroll setting.
     //
