@@ -1,0 +1,75 @@
+#!/bin/bash
+f="$1"
+id="$2"
+choice="$3"
+
+[ -z "$f" ] && exit 1
+[ -z "$id" ] && exit 1
+
+mime=$(file --mime-type -Lb "$f")
+apps=()
+
+case "$mime" in
+    */svg+xml)
+        apps=("firefox" "nvim" "inkscape")
+        ;;
+    image/*)
+        apps=("gwenview" "imv")
+        ;;
+    */pdf)
+        apps=("firefox" "okular" "zathura" "pdfarraner")
+        ;;
+    */epub*)
+        apps=("zathura" "okular")
+        ;;
+    video/*)
+        apps=("mpv" "smplayer")
+        ;;
+    audio/*)
+        apps=("mpv" "audacious")
+        ;;
+    */html)
+        apps=("firefox" "nvim")
+        ;;
+    text/*|inode/x-empty)
+        apps=("nvim" "vim" "okular")
+        ;;
+    application/*opendocument*|*officedocument*)
+        apps=("libreoffice")
+        ;;
+    *)
+        apps=("xdg-open" "nvim" "vim" "mpv")
+        ;;
+esac
+
+if [ ${#apps[@]} -eq 0 ]; then
+    lf -remote "send $id echo No handler"
+    exit 0
+fi
+
+msg="Open with: "
+for i in "${!apps[@]}"; do
+    n=$((i+1))
+    msg+="$n)${apps[i]}  "
+done
+
+lf -remote "send $id echo \"$msg\""
+#echo "$msg"
+
+read -p "" choice
+
+index=$((choice-1))
+[ $index -lt 0 ] || [ $index -ge ${#apps[@]} ] && exit 0
+
+program="${apps[index]}"
+
+case "$program" in
+    nvim|vim|less|mpv)
+        # Replace "kitty" with your terminal emulator
+        setsid "${TERMINAL:-kitty}" -e "$program" "$f" >/dev/null 2>&1 &
+        ;;
+    *)
+        # Some GUIs
+        setsid "$program" "$f" >/dev/null 2>&1 &
+        ;;
+esac

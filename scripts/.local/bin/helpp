@@ -1,0 +1,128 @@
+#!/bin/bash
+#this user defined shell script is used to provide the user with
+#the name and usage of some uncommon command and applications
+
+# Colors
+ESC=$(printf "\033")
+RST="${ESC}[0m"
+BOLD="${ESC}[1m"
+B="${ESC}[34m"
+CY="${ESC}[36m"
+G="${ESC}[32m"
+Y="${ESC}[33m"
+R="${ESC}[31m"
+PU="${ESC}[35m"
+BY="${ESC}[93m"
+
+#Menu Options
+CMDS=(
+	"duf"
+	"timedatectl set-ntp true"
+	"s-tui"
+	"brctl"
+)
+
+DESCRIPTIONS=(
+	"view disk usage/remaining space"
+	"adjust local time"
+	"CPU pressure test"
+	"network bridge"
+)
+
+HINTS=(
+	"Press ${BY}enter${Y} to run ${B}duf${RST}"
+	"${R}Root${Y} privilege needed, press ${BY}enter${Y} to run ${B}timedatectl${Y} instead"
+	"Press ${BY}enter${Y} to start pressure test"
+	"Press ${BY}enter${Y} to view ${G}brctl${Y} manual"
+)
+
+#fuzzy match
+fuzzy_match() {
+	local query="$1"
+    local str="$2"
+    local pos=0
+    local c
+    for (( i=0; i<${#query}; i++ )); do
+        c="${query:i:1}"
+        local found=0
+        for (( j=pos; j<${#str}; j++ )); do
+            if [[ "${str:j:1}" == "$c" ]]; then
+                pos=$((j+1))
+                found=1
+                break
+            fi
+        done
+        if [[ $found -eq 0 ]]; then
+            return 1
+        fi
+    done
+    return 0
+}
+
+#hide the cursor
+tput civis
+
+trap "tput cnorm; clear; exit" SIGINT SIGTERM
+
+#choose index
+selected=0
+while true; do
+	clear
+	echo -e "${CY}================ User Defined Command Help ================${RST}"
+	echo -e "${CY}Press${RST} ${Y}q${RST} ${CY}to exit${RST}   ${CY}Press${RST} ${Y}j/k${RST} ${CY}to change the cursor${RST}"
+	echo -e "${CY}Press${RST} ${Y}/${RST} ${CY}to search${RST} ${CY}Press${RST} ${Y}h/l${RST} ${CY}to change the cursor quickly${RST}"
+	echo -e "${CY}===========================================================${RST}"
+
+	for i in "${!CMDS[@]}"; do
+		if [ "$i" -eq "$selected" ]; then
+			echo -e "=> ${G}${CMDS[i]} -${RST} ${B}${DESCRIPTIONS[i]}${RST}"
+		else
+			echo -e "  ${G}${CMDS[i]} -${RST} ${B}${DESCRIPTIONS[i]}${RST}"
+		fi
+	done
+	#print hints
+	tput cup $(($(tput lines)-1)) 0
+	echo -ne "${Y}>_ ${HINTS[$selected]}${RST}"
+
+	#read keyboard
+    read -rsn1 key
+    case "$key" in
+		#move cursor up and down
+        j) ((selected++)); [ $selected -ge ${#CMDS[@]} ] && selected=0 ;;
+        k) ((selected--)); [ $selected -lt 0 ] && selected=$((${#CMDS[@]} - 1)) ;;
+        q) tput cnorm; clear; exit ;;
+		h) ((selected+=3)); [ $selected -ge ${#CMDS[@]} ] && selected=$(($selected % ${#CMDS[@]})) ;;
+        l) ((selected-=3));  [ $selected -lt 0 ] && selected=$((${#CMDS[@]} + $selected)) ;;
+		#Search mode
+		/) tput cnorm
+			echo -ne "\n${Y}Search: ${RST}"
+			IFS= read -r query
+			tput civis
+			if [[ -n "$query" ]]; then
+				found=0
+				for string in "${CMDS[@]}"; do
+					if fuzzy_match "$query" "$string"; then
+						#selected=$i
+						echo -e "${B}$string${RST}"
+						read -p "${G}Press${RST} ${Y}enter${RST} ${G}to continue...${RST}"
+						found=1
+						break
+					fi
+				done
+				if [[ $found -eq 0 ]]; then
+					echo -e "\n${Y}No match found !${RST}"
+					sleep 1
+				fi
+			fi
+			;;
+        "")  # Enter
+            case "${CMDS[selected]}" in
+                "timedatectl set-ntp true") echo ""&&timedatectl ; read -p "${Y}Press enter to return...${RST}" ;;
+                "duf") echo ""&&duf ; read -p "${Y}Press enter to return...${RST}" ;;
+                "s-tui") s-tui ;;
+                "brctl") man brctl ;;
+            esac
+            ;;
+    esac
+done
+

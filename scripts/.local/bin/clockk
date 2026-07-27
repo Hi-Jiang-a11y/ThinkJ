@@ -1,0 +1,5 @@
+#/bin/bash
+# A script used to display clock on the ternimal
+tput civis
+WAIT_TIME=$((60 - $(date +%S)))
+

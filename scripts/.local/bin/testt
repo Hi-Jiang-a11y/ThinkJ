@@ -1,0 +1,96 @@
+#!/bin/bash
+
+# ===== Colors =====
+ESC=$(printf "\033")
+BOLD="${ESC}[1m"
+RST="${ESC}[0m"
+P="${ESC}[95m"
+G="${ESC}[32m"
+B="${ESC}[34m"
+
+#  Main Menu
+MAIN_CMDS=("System" "Network" "Tools")
+
+# ===== Sub Menus =====
+SUB_CMDS_0=("duf" "timedatectl")
+SUB_CMDS_1=("bridge" "ip")
+SUB_CMDS_2=("s-tui" "htop")
+
+tput civis
+trap 'tput cnorm; clear; exit' EXIT
+selected=0
+state="main"
+sub_selected=0
+
+# Main Loop
+while true; do
+	clear
+
+	if [[ "$state" == "main" ]]; then
+		echo -e "${P}====== Main Menu ======${RST}"
+
+		for i in "${!MAIN_CMDS[@]}"; do
+			if [ "$i" -eq "$selected" ]; then
+				echo -e "=> ${BOLD}${B}${MAIN_CMDS[i]}${RST}"
+			else
+				echo -e "   ${MAIN_CMDS[i]}"
+			fi
+		done
+
+	else
+		echo -e "${P}====== Sub Menu ======${RST}"
+
+		eval "SUB_CMDS=(\"\${SUB_CMDS_${selected}[@]}\")"
+
+		for i in "${!SUB_CMDS[@]}"; do
+			if [ "$i" -eq "$sub_selected" ]; then
+				echo -e "=> ${G}${SUB_CMDS[i]}${RST}"
+			else
+				echo -e "   ${SUB_CMDS[i]}"
+			fi
+		done
+	fi
+
+	# ===== Key Input =====
+	read -rsn1 key
+
+	case "$key" in
+		j)
+			if [[ "$state" == "main" ]]; then
+				((selected++))
+			else
+				((sub_selected++))
+			fi
+			;;
+		k)
+			if [[ "$state" == "main" ]]; then
+				((selected--))
+			else
+				((sub_selected--))
+			fi
+			;;
+		l)
+			if [[ "$state" == "main" ]]; then
+				state="sub"
+				sub_selected=0
+			fi
+			;;
+		h)
+			if [[ "$state" == "sub" ]]; then
+				state="main"
+			fi
+			;;
+		q) exit ;;
+	esac
+
+	# ===== Boundary Fix =====
+	if [[ "$state" == "main" ]]; then
+		((selected < 0)) && selected=$((${#MAIN_CMDS[@]} - 1))
+		((selected >= ${#MAIN_CMDS[@]})) && selected=0
+	else
+		eval "SUB_CMDS=(\"\${SUB_CMDS_${selected}[@]}\")"
+		((sub_selected < 0)) && sub_selected=$((${#SUB_CMDS[@]} - 1))
+		((sub_selected >= ${#SUB_CMDS[@]})) && sub_selected=0
+	fi
+
+done
