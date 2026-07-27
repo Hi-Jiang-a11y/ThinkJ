@@ -6,33 +6,34 @@
     "autohide-blocked": "false",
     "exclusive": "true",
     "passthrough": "false",
-    "height": 10, // Waybar height (to be removed for auto height)
+    "height": 28,
     "spacing": 0, // Gaps between modules
     // Choose the order of the modules
     "modules-left": [
         "niri/workspaces",
         "clock",
         "cpu",
-        "temperature",
         "memory",
-        "niri/window",
-        "niri/scratchpad",
-        "custom/media"
+        "disk",
+        "temperature"
     ],
     "modules-center": [
+        "custom/window-or-media"
     ],
     "modules-right": [
-        //"mpd",
-        //"idle_inhibitor",
+        "idle_inhibitor",
+        "custom/updates",
+        "custom/clipboard",
+        "backlight",
         "pulseaudio",
         "network",
-        "power-profiles-daemon",
         "battery",
-        "tray"
+        "group/tray"
     ],
 
     "niri/workspaces": {
-        "current-only": true
+        "current-only": false,
+        "format": "[{index}]"
     },
     "niri/scratchpad": {
         "format": "{icon} {count}",
@@ -41,12 +42,28 @@
         "tooltip": true,
         "tooltip-format": "{app}: {title}"
     },
+    "niri/window": {
+        "format": "[ {} ]",
+        "max-length": 56,
+        "separate-outputs": false
+    },
+    "custom/window-or-media": {
+        "format": "[ {text} ]",
+        "max-length": 56,
+        "hide-empty-text": true,
+        "exec": "if [ \"$(playerctl status 2>/dev/null)\" = Playing ]; then playerctl metadata --format ' {{artist}} — {{title}}'; else niri msg --json focused-window 2>/dev/null | sed -n 's/.*\"title\":\"\\([^\"]*\\)\".*/\\1/p'; fi",
+        "interval": 2,
+        "on-click": "playerctl play-pause",
+        "on-click-right": "playerctl stop",
+        "on-scroll-up": "playerctl next",
+        "on-scroll-down": "playerctl previous"
+    },
     "mpd": {
         "format": "{stateIcon} {consumeIcon}{randomIcon}{repeatIcon}{singleIcon}{artist} - {album} - {title} ({elapsedTime:%M:%S}/{totalTime:%M:%S}) ⸨{songPosition}|{queueLength}⸩ {volume}% ",
         "format-disconnected": "Disconnected ",
         "format-stopped": "{consumeIcon}{randomIcon}{repeatIcon}{singleIcon}Stopped ",
         "unknown-tag": "N/A",
-        "interval": 5,
+        "interval": 1,
         "consume-icons": {
             "on": " "
         },
@@ -68,34 +85,67 @@
         "tooltip-format-disconnected": "MPD (disconnected)"
     },
     "tray": {
-        // "icon-size": 21,
-        "spacing": 10,
+        "spacing": 4
         // "icons": {
         //   "blueman": "bluetooth",
         //   "TelegramDesktop": "$HOME/.local/share/icons/hicolor/16x16/apps/telegram.png"
         // }
     },
+    "custom/tray-toggle": {
+        "format": "[]",
+        "tooltip": false
+    },
+    "group/tray": {
+        "orientation": "horizontal",
+        "drawer": {
+            "transition-duration": 200,
+            "children-class": "tray-hidden",
+            "click-to-reveal": true,
+            "transition-left-to-right": false
+        },
+        "modules": [
+            "custom/tray-toggle",
+            "tray"
+        ]
+    },
     "clock": {
-        // "timezone": "America/New_York",
-        "format": "{:%H:%M | %B %d}",
-        "format-alt": "{:%H:%M | %A}",
-        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>"
+        "format": "[{:%H:%M|%m/%d}]",
+        "format-alt": "[ {:%a %d %b} ]",
+        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+        "on-click": "kitty --class calcurse -e calcurse"
     },
     "cpu": {
         "interval": 30,
-        "format": "CPU {usage}%",
-        "tooltip": false
+        "format": "[CPU {usage}%]",
+        "tooltip": false,
+        "on-click": "kitty --class btop -e btop"
     },
     "memory": {
         "interval": 30,
-        "format": "MEM {used:0.1f}G",
-        "tooltip": false
+        "format": "[MEM {used:0.1f}G]",
+        "tooltip": false,
+        "on-click": "kitty --class btop -e btop"
     },
     "temperature": {
         // "thermal-zone": 2,
         // "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input",
         "critical-threshold": 65,
-        "format": "{temperatureC}°C"
+        "format": "[ {temperatureC}°C]",
+        "on-click": "kitty --class btop -e btop"
+    },
+    "disk": {
+        "interval": 60,
+        "path": "/home",
+        "format": "[HOME {percentage_used}%]",
+        "tooltip-format": "{used} used of {total} ({percentage_used}%)",
+        "on-click": "kitty --class btop -e btop"
+    },
+    "backlight": {
+        "format": "[{icon} {percent}%]",
+        "format-icons": ["󰃞", "󰃟", "󰃠"],
+        "tooltip": false,
+        "on-scroll-up": "brightnessctl set +5%",
+        "on-scroll-down": "brightnessctl set 5%-"
     },
     "battery": {
         "states": {
@@ -103,43 +153,34 @@
             "warning": 30,
             "critical": 20
         },
-        "format": "{capacity}% {icon}",
-        "format-full": "{capacity}% {icon}",
-        "format-charging": "{capacity}% ",
-        "format-plugged": "{capacity}% ",
-        "format-alt": "{time} {icon}",
+        "format": "[{capacity}% {icon} ]",
+        "format-full": "[{capacity}% {icon} ]",
+        "format-charging": "[{capacity}%  ]",
+        "format-plugged": "[{capacity}%  ]",
+        "format-alt": "[{time} {icon} ]",
         // "format-good": "", // An empty format will hide the module
         // "format-full": "",
         "format-icons": ["", "", "", "", ""]
     },
-    "power-profiles-daemon": {
-        "format": "{icon}",
-        "tooltip-format": "Power profile: {profile}\nDriver: {driver}",
-        "tooltip": true,
-        "format-icons": {
-            "default": "",
-            "performance": "",
-            "balanced": "",
-            "power-saver": ""
-        }
-    },
     "network": {
         // "interface": "wlp2*", // (Optional) To force the use of this interface
-        "format-wifi": " {signalStrength}%",
-        "format-ethernet": "{ipaddr}/{cidr} ",
+        "format-wifi": "[  {signalStrength}%]",
+        "format-ethernet": "[󰈀]",
         "tooltip-format": "{ifname} via {gwaddr} ",
-        "format-linked": "{ifname} (No IP) ",
-        "format-disconnected": "Disconnected ⚠",
-        "format-alt": "{ifname}: {ipaddr}/{cidr}"
+        "format-linked": "[󰈀]",
+        "format-disconnected": "[󰖪]",
+        "format-alt": "[{ifname}: {ipaddr}/{cidr}]",
+        "on-click": "nm-connection-editor",
+        "on-click-right": "kitty --class nmtui -e nmtui"
     },
     "pulseaudio": {
-        // "scroll-step": 1, // %, can be a float
-        "format": "{volume}% {icon} {format_source}",
-        "format-bluetooth": "{volume}% {icon} {format_source}",
-        "format-bluetooth-muted": " {icon} {format_source}",
-        "format-muted": " {format_source}",
-        "format-source": "{volume}% ",
-        "format-source-muted": "",
+        "scroll-step": 2,
+        "format": "[{volume}% {icon}]",
+        "format-bluetooth": "[{volume}% {icon}]",
+        "format-bluetooth-muted": "[󰝟 {icon}]",
+        "format-muted": "[󰝟]",
+        "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+        "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle",
         "format-icons": {
             "headphone": "",
             "hands-free": "",
@@ -150,16 +191,57 @@
             "default": ["", "", ""]
         }
     },
-    "custom/media": {
-        "format": "{icon} {text}",
-        "return-type": "json",
-        "max-length": 40,
+    "idle_inhibitor": {
+        "format": "[{icon} ]",
         "format-icons": {
-            "spotify": "",
-            "default": "🎜"
+            "activated": "",
+            "deactivated": ""
         },
-        "escape": true,
-        "exec": "$HOME/.config/waybar/mediaplayer.py 2> /dev/null" // Script in resources folder
-        // "exec": "$HOME/.config/waybar/mediaplayer.py --player spotify 2> /dev/null" // Filter player based on name
+        "tooltip-format-activated": "Idle inhibit: on",
+        "tooltip-format-deactivated": "Idle inhibit: off"
+    },
+    "privacy": {
+        "icon-spacing": 4,
+        "icon-size": 14,
+        "modules": [
+            {
+                "type": "screenshare",
+                "tooltip": true,
+                "tooltip-icon-size": 20
+            },
+            {
+                "type": "audio-in",
+                "tooltip": true,
+                "tooltip-icon-size": 20
+            }
+        ]
+    },
+    "custom/updates": {
+        "format": "[UPD {text}]",
+        "exec": "checkupdates 2>/dev/null | wc -l",
+        "interval": 1800,
+        "tooltip": true,
+        "tooltip-format": "{text} pending pacman updates\nLeft click: run system update",
+        "on-click": "kitty --class system-update -e bash -lc 'sudo pacman -Syu; exec bash'"
+    },
+    "custom/clipboard": {
+        "format": "[CLIP {text}]",
+        "exec": "cliphist list 2>/dev/null | wc -l",
+        "signal": 8,
+        "tooltip": true,
+        "tooltip-format": "Clipboard history: {text} entries\nLeft click: pick and copy\nRight click: clear",
+        "on-click": "selection=$(cliphist list | fuzzel --dmenu --with-nth=2 --no-run-if-empty --prompt='Clipboard> '); [ -n \"$selection\" ] && printf '%s' \"$selection\" | cliphist decode | wl-copy",
+        "on-click-right": "cliphist wipe"
+    },
+    "custom/media": {
+        "format": "[ {text} ]",
+        "max-length": 28,
+        "hide-empty-text": true,
+        "exec": "playerctl metadata --format ' {{artist}} — {{title}}' 2> /dev/null || true",
+        "interval": 2,
+        "on-click": "playerctl play-pause",
+        "on-click-right": "playerctl stop",
+        "on-scroll-up": "playerctl next",
+        "on-scroll-down": "playerctl previous"
     }
 }
