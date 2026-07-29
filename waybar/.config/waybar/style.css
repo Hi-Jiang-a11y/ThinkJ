@@ -10,7 +10,6 @@
 window#waybar {
     background: #0b0b0d;
     color: #e7dfe8;
-    border-bottom: 1px solid #ffb6c1;
 }
 
 tooltip {
@@ -70,6 +69,7 @@ tooltip label {
 #idle_inhibitor,
 #battery,
 #privacy,
+#custom-notifications,
 #custom-updates,
 #custom-clipboard,
 #custom-tray-toggle,
@@ -112,13 +112,14 @@ tooltip label {
 }
 
 #custom-updates,
+#custom-notifications,
 #custom-clipboard {
     color: #d8d2dc;
 }
 
 #pulseaudio.muted,
 #network.disconnected {
-    color: #958b98;
+    color: #d8d2dc;
 }
 
 #idle_inhibitor {
