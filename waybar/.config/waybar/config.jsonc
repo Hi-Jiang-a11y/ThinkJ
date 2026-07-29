@@ -6,7 +6,6 @@
     "autohide-blocked": "false",
     "exclusive": "true",
     "passthrough": "false",
-    "height": 28,
     "spacing": 0, // Gaps between modules
     // Choose the order of the modules
     "modules-left": [
@@ -15,13 +14,16 @@
         "cpu",
         "memory",
         "disk",
-        "temperature"
+        "temperature",
+        "niri/window"
     ],
     "modules-center": [
-        "custom/window-or-media"
+        "custom/media"
     ],
     "modules-right": [
         "idle_inhibitor",
+        "privacy",
+        "custom/notifications",
         "custom/updates",
         "custom/clipboard",
         "backlight",
@@ -46,17 +48,6 @@
         "format": "[ {} ]",
         "max-length": 56,
         "separate-outputs": false
-    },
-    "custom/window-or-media": {
-        "format": "[ {text} ]",
-        "max-length": 56,
-        "hide-empty-text": true,
-        "exec": "if [ \"$(playerctl status 2>/dev/null)\" = Playing ]; then playerctl metadata --format ' {{artist}} — {{title}}'; else niri msg --json focused-window 2>/dev/null | sed -n 's/.*\"title\":\"\\([^\"]*\\)\".*/\\1/p'; fi",
-        "interval": 2,
-        "on-click": "playerctl play-pause",
-        "on-click-right": "playerctl stop",
-        "on-scroll-up": "playerctl next",
-        "on-scroll-down": "playerctl previous"
     },
     "mpd": {
         "format": "{stateIcon} {consumeIcon}{randomIcon}{repeatIcon}{singleIcon}{artist} - {album} - {title} ({elapsedTime:%M:%S}/{totalTime:%M:%S}) ⸨{songPosition}|{queueLength}⸩ {volume}% ",
@@ -130,7 +121,7 @@
         // "thermal-zone": 2,
         // "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input",
         "critical-threshold": 65,
-        "format": "[ {temperatureC}°C]",
+        "format": "[ {temperatureC}°C]",
         "on-click": "kitty --class btop -e btop"
     },
     "disk": {
@@ -141,8 +132,7 @@
         "on-click": "kitty --class btop -e btop"
     },
     "backlight": {
-        "format": "[{icon} {percent}%]",
-        "format-icons": ["󰃞", "󰃟", "󰃠"],
+        "format": "[ {percent}%]",
         "tooltip": false,
         "on-scroll-up": "brightnessctl set +5%",
         "on-scroll-down": "brightnessctl set 5%-"
@@ -153,56 +143,56 @@
             "warning": 30,
             "critical": 20
         },
-        "format": "[{capacity}% {icon} ]",
-        "format-full": "[{capacity}% {icon} ]",
-        "format-charging": "[{capacity}%  ]",
-        "format-plugged": "[{capacity}%  ]",
-        "format-alt": "[{time} {icon} ]",
+        "format": "[{icon}{capacity}%]",
+        "format-full": "[{icon}{capacity}%]",
+        "format-charging": "[ {capacity}%]",
+        "format-plugged": "[ {capacity}%]",
+        "format-alt": "[{icon}{time}]",
         // "format-good": "", // An empty format will hide the module
         // "format-full": "",
-        "format-icons": ["", "", "", "", ""]
+        "format-icons": [" ", " ", " ", " ", " "]
     },
     "network": {
         // "interface": "wlp2*", // (Optional) To force the use of this interface
-        "format-wifi": "[  {signalStrength}%]",
-        "format-ethernet": "[󰈀]",
-        "tooltip-format": "{ifname} via {gwaddr} ",
-        "format-linked": "[󰈀]",
-        "format-disconnected": "[󰖪]",
+        "format-wifi": "[ {signalStrength}%]",
+        "format-ethernet": "[󰈀 ]",
+        "tooltip-format": "{ifname} via {gwaddr}  ",
+        "format-linked": "[󰈀 ]",
+        "format-disconnected": "[󰖪 ]",
         "format-alt": "[{ifname}: {ipaddr}/{cidr}]",
         "on-click": "nm-connection-editor",
         "on-click-right": "kitty --class nmtui -e nmtui"
     },
     "pulseaudio": {
         "scroll-step": 2,
-        "format": "[{volume}% {icon}]",
-        "format-bluetooth": "[{volume}% {icon}]",
-        "format-bluetooth-muted": "[󰝟 {icon}]",
-        "format-muted": "[󰝟]",
+        "format": "[{icon}{volume}%]",
+        "format-bluetooth": "[󰂰 {volume}%]",
+        "format-bluetooth-muted": "[{icon} 󰝟 ]",
+        "format-muted": "[ ]",
         "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
         "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle",
         "format-icons": {
-            "headphone": "",
-            "hands-free": "",
-            "headset": "",
-            "phone": "",
-            "portable": "",
-            "car": "",
-            "default": ["", "", ""]
+            "headphone": " ",
+            "hands-free": " ",
+            "headset": " ",
+            "phone": " ",
+            "portable": " ",
+            "car": " ",
+            "default": " "
         }
     },
     "idle_inhibitor": {
-        "format": "[{icon} ]",
+        "format": "[{icon}]",
         "format-icons": {
-            "activated": "",
-            "deactivated": ""
+            "activated": " ",
+            "deactivated": " "
         },
         "tooltip-format-activated": "Idle inhibit: on",
         "tooltip-format-deactivated": "Idle inhibit: off"
     },
     "privacy": {
         "icon-spacing": 4,
-        "icon-size": 14,
+        "icon-size": 16,
         "modules": [
             {
                 "type": "screenshare",
@@ -214,18 +204,28 @@
                 "tooltip": true,
                 "tooltip-icon-size": 20
             }
-        ]
+        ],
+        "ignore-monitor": true
     },
     "custom/updates": {
-        "format": "[UPD {text}]",
-        "exec": "checkupdates 2>/dev/null | wc -l",
-        "interval": 1800,
+        "format": "[ {text}]",
+        "exec": "pacman -Qu | wc -l",
+        "interval": 300,
         "tooltip": true,
         "tooltip-format": "{text} pending pacman updates\nLeft click: run system update",
         "on-click": "kitty --class system-update -e bash -lc 'sudo pacman -Syu; exec bash'"
     },
+    "custom/notifications": {
+        "format": "[ {text}]",
+        "exec": "python3 /home/Juliet/dotfiles/waybar/.config/waybar/scripts/dunst-notifications.py monitor",
+        "restart-interval": 5,
+        "tooltip": true,
+        "tooltip-format": "{text} pending notifications\nLeft click: open notification center\nRight click: clear history",
+        "on-click": "python3 /home/Juliet/dotfiles/waybar/.config/waybar/scripts/dunst-notifications.py show",
+        "on-click-right": "python3 /home/Juliet/dotfiles/waybar/.config/waybar/scripts/dunst-notifications.py clear"
+    },
     "custom/clipboard": {
-        "format": "[CLIP {text}]",
+        "format": "[ {text}]",
         "exec": "cliphist list 2>/dev/null | wc -l",
         "signal": 8,
         "tooltip": true,
@@ -237,7 +237,7 @@
         "format": "[ {text} ]",
         "max-length": 28,
         "hide-empty-text": true,
-        "exec": "playerctl metadata --format ' {{artist}} — {{title}}' 2> /dev/null || true",
+        "exec": "if [ \"$(playerctl status 2>/dev/null)\" = Playing ]; then playerctl metadata --format ' {{artist}} — {{title}}'; fi",
         "interval": 2,
         "on-click": "playerctl play-pause",
         "on-click-right": "playerctl stop",
