@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+entries=$(cliphist list)
+lines=$(printf '%s\n' "$entries" | awk 'NF { count++ } END { print count < 5 ? 5 : count }')
+selection=$(printf '%s\n' "$entries" | fuzzel --dmenu --with-nth=2 --no-run-if-empty --prompt='Clipboard> ' --lines="$lines")
+[ -n "$selection" ] && printf '%s' "$selection" | cliphist decode | wl-copy
