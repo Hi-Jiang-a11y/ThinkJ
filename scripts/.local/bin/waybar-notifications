@@ -45,7 +45,6 @@ def field(notification, name):
 
 
 def pending_count():
-    """Count active notifications plus the notifications retained in history."""
     displayed = dunstctl("count", "displayed")
     try:
         active = int(displayed.stdout.strip()) if displayed.returncode == 0 else 0
@@ -59,10 +58,7 @@ def print_count():
 
 
 def monitor():
-    def refresh(_signum, _frame):
-        print_count()
-
-    signal.signal(signal.SIGUSR1, refresh)
+    signal.signal(signal.SIGUSR1, lambda _signum, _frame: print_count())
     print_count()
     command = [
         "dbus-monitor",
@@ -79,7 +75,6 @@ def monitor():
         assert process.stdout is not None
         for line in process.stdout:
             if "member=Notify" in line or "member=NotificationClosed" in line:
-                # Notify is observed just before Dunst changes its state.
                 time.sleep(0.2)
                 print_count()
         process.wait()
@@ -88,9 +83,6 @@ def monitor():
 
 def show_history():
     notifications = history()
-    if not notifications:
-        return
-
     entries = []
     notification_ids = []
     for notification in reversed(notifications):
@@ -105,19 +97,13 @@ def show_history():
             text += f" — {body}"
         notification_ids.append(notification_id)
         entries.append(text)
-
     if not entries:
         return
 
     picker = subprocess.run(
         [
-            "fuzzel",
-            "--dmenu",
-            "--prompt=Notifications> ",
-            "--lines=12",
-            "--width=90",
-            "--index",
-            "--no-run-if-empty",
+            "fuzzel", "--dmenu", "--prompt=Notifications$ ", "--index", "--no-run-if-empty",
+            f"--lines={max(5, len(entries))}",
         ],
         input="\n".join(entries) + "\n",
         text=True,
@@ -131,20 +117,13 @@ def show_history():
 
 def clear_history():
     dunstctl("history-clear")
-    subprocess.run(
-        ["pkill", "-USR1", "-f", "dunst-notifications.py monitor"], check=False
-    )
+    subprocess.run(["pkill", "-USR1", "-f", "waybar-notifications monitor"], check=False)
 
 
 def main():
     if len(sys.argv) != 2 or sys.argv[1] not in {"monitor", "show", "clear"}:
-        raise SystemExit("usage: dunst-notifications.py {monitor|show|clear}")
-    if sys.argv[1] == "monitor":
-        monitor()
-    elif sys.argv[1] == "show":
-        show_history()
-    else:
-        clear_history()
+        raise SystemExit("usage: waybar-notifications {monitor|show|clear}")
+    {"monitor": monitor, "show": show_history, "clear": clear_history}[sys.argv[1]]()
 
 
 if __name__ == "__main__":

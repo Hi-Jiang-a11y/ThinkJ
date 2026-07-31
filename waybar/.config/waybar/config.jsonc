@@ -217,12 +217,12 @@
     },
     "custom/notifications": {
         "format": "[ {text}]",
-        "exec": "python3 /home/Juliet/dotfiles/waybar/.config/waybar/scripts/dunst-notifications.py monitor",
+        "exec": "/home/Juliet/.local/bin/waybar-notifications monitor",
         "restart-interval": 5,
         "tooltip": true,
         "tooltip-format": "{text} pending notifications\nLeft click: open notification center\nRight click: clear history",
-        "on-click": "python3 /home/Juliet/dotfiles/waybar/.config/waybar/scripts/dunst-notifications.py show",
-        "on-click-right": "python3 /home/Juliet/dotfiles/waybar/.config/waybar/scripts/dunst-notifications.py clear"
+        "on-click": "/home/Juliet/.local/bin/waybar-notifications show",
+        "on-click-right": "/home/Juliet/.local/bin/waybar-notifications clear"
     },
     "custom/clipboard": {
         "format": "[ {text}]",
@@ -230,7 +230,7 @@
         "signal": 8,
         "tooltip": true,
         "tooltip-format": "Clipboard history: {text} entries\nLeft click: pick and copy\nRight click: clear",
-        "on-click": "selection=$(cliphist list | fuzzel --dmenu --with-nth=2 --no-run-if-empty --prompt='Clipboard> '); [ -n \"$selection\" ] && printf '%s' \"$selection\" | cliphist decode | wl-copy",
+        "on-click": "/home/Juliet/.local/bin/waybar-clipboard",
         "on-click-right": "cliphist wipe"
     },
     "custom/media": {
