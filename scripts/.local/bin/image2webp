@@ -1,0 +1,100 @@
+#!/usr/bin/env bash
+# Batch-convert PNG/JPG/JPEG and other common image formats to WebP.
+# Requires ImageMagick 7 (the `magick` command).
+
+set -uo pipefail
+
+usage() {
+  cat <<'EOF'
+用法：
+  image_to_webp.sh <输入文件或目录> <输出文件或目录> [-q 质量] [-r]
+
+选项：
+  -q, --quality <0-100>  WebP 质量，默认 85
+  -r, --recursive        递归处理输入目录的子目录
+
+示例：
+  ./image_to_webp.sh photo.png photo.webp
+  ./image_to_webp.sh ./images ./webp-output
+  ./image_to_webp.sh ./images ./webp-output -r -q 90
+EOF
+}
+
+command -v magick >/dev/null 2>&1 || {
+  echo "错误：未找到 ImageMagick 的 magick 命令。" >&2
+  exit 1
+}
+
+quality=85
+recursive=false
+positionals=()
+
+while (($#)); do
+  case "$1" in
+    -q|--quality)
+      [[ $# -ge 2 ]] || { echo "错误：$1 需要一个数值。" >&2; exit 2; }
+      quality=$2
+      shift 2
+      ;;
+    -r|--recursive)
+      recursive=true
+      shift
+      ;;
+    -h|--help)
+      usage
+      exit 0
+      ;;
+    -*)
+      echo "错误：未知选项：$1" >&2
+      usage >&2
+      exit 2
+      ;;
+    *)
+      positionals+=("$1")
+      shift
+      ;;
+  esac
+done
+
+[[ ${#positionals[@]} -eq 2 ]] || { usage >&2; exit 2; }
+[[ $quality =~ ^([0-9]|[1-9][0-9]|100)$ ]] || { echo "错误：质量须介于 0 和 100 之间。" >&2; exit 2; }
+
+input=${positionals[0]}
+[[ $input == / ]] || input=${input%/}
+output=${positionals[1]}
+[[ -e $input ]] || { echo "错误：找不到输入路径：$input" >&2; exit 1; }
+
+convert_one() {
+  local source=$1 destination=$2
+  mkdir -p "$(dirname "$destination")"
+  if magick "$source" -quality "$quality" "$destination"; then
+    printf '已转换：%s -> %s\n' "$source" "$destination"
+    ((converted+=1))
+  else
+    printf '跳过（转换失败）：%s\n' "$source" >&2
+    ((failed+=1))
+  fi
+}
+
+converted=0
+failed=0
+
+if [[ -f $input ]]; then
+  if [[ ${output,,} == *.webp ]]; then
+    destination=$output
+  else
+    destination="$output/$(basename "${input%.*}").webp"
+  fi
+  convert_one "$input" "$destination"
+else
+  find_args=("$input")
+  $recursive && find_args+=(-type f) || find_args+=(-maxdepth 1 -type f)
+
+  while IFS= read -r -d '' source; do
+    relative=${source#"$input"/}
+    convert_one "$source" "$output/${relative%.*}.webp"
+  done < <(find "${find_args[@]}" \( -iname '*.png' -o -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.bmp' -o -iname '*.tif' -o -iname '*.tiff' -o -iname '*.gif' \) -print0)
+fi
+
+printf '完成：成功 %d 个，失败 %d 个。\n' "$converted" "$failed"
+((failed == 0))
