@@ -1,6 +1,9 @@
 # Interactive Bash settings.
 [[ $- != *i* ]] && return
 
+export INPUTRC="${XDG_CONFIG_HOME:-$HOME/.config}/inputrc"
+[[ -r "$INPUTRC" ]] && bind -f "$INPUTRC"
+
 [[ -r "$HOME/.config/dircolors" ]] &&
     eval "$(dircolors "$HOME/.config/dircolors")"
 
@@ -8,7 +11,13 @@ PS1='\[\e[38;5;183;1m\]\u\[\e[0;97m\]@\[\e[38;5;111;1m\]\H\[\e[37;2m\]:\[\e[0;1;
 
 set -o vi
 
-# eval "$(/usr/bin/fzf --bash)"
+# Fuzzy shell navigation and history search.
+eval "$(fzf --bash)"
+
+# Smart directory jumping: `z query` and interactive `zi`.
+if command -v zoxide >/dev/null 2>&1; then
+    eval "$(zoxide init bash)"
+fi
 
 bind -m vi-command 'Control-l: clear-screen'
 bind -m vi-insert 'Control-l: clear-screen'

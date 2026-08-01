@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+# Capture a selected screen region, recognize Traditional Chinese and English,
+# then copy the resulting text to the Wayland clipboard.
+
+set -u
+
+image=$(mktemp --suffix=.png)
+error_log=$(mktemp)
+trap 'rm -f "$image" "$error_log"' EXIT
+
+region=$(slurp) || exit 0
+grim -g "$region" "$image" || {
+    notify-send -a OCR -u critical "OCR failed" "Could not capture the selected area."
+    exit 1
+}
+
+if ! text=$(tesseract "$image" stdout -l chi_tra+eng --psm 6 2>"$error_log"); then
+    notify-send -a OCR -u critical "OCR failed" "Install tesseract-data-eng and tesseract-data-chi_tra."
+    exit 1
+fi
+
+if [ -z "$text" ]; then
+    notify-send -a OCR "No text found" "Try selecting a tighter or higher-contrast area."
+    exit 0
+fi
+
+printf '%s' "$text" | wl-copy
+lines=$(printf '%s\n' "$text" | wc -l)
+notify-send -a OCR "Text copied" "$lines line(s) copied to the clipboard."
