@@ -1,0 +1,5 @@
+/* Override theme-provided font rules for all GTK3 widgets. */
+* {
+  font-family: "JetBrainsMono Nerd Font";
+  font-size: 11pt;
+}

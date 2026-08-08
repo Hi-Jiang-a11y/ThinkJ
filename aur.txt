@@ -1,7 +1,0 @@
-clash-party-bin
-howdy-git
-libinput-config-git
-linuxqq-appimage
-nirimap-git
-picotool
-spotify
