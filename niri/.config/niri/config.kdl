@@ -289,7 +289,9 @@ spawn-sh-at-startup "wl-paste --type image --watch sh -c 'cliphist store && pkil
 spawn-at-startup "nirimap"
 
 // Set wallpaper
-spawn-sh-at-startup "swaybg -i ~/.local/share/thinkpad_wallpaper.jpg -m fill"
+spawn-sh-at-startup "swaybg -i ~/.local/share/WallPaper/wallpaper1.png -m fill"
+
+
 
 // To run a shell command (with variables, pipes, etc.), use spawn-sh-at-startup:
 // spawn-sh-at-startup "qs -c ~/source/qs/MyAwesomeShell"
