@@ -100,7 +100,7 @@
         ]
     },
     "clock": {
-        "format": "[{:%H:%M|%m/%d}]",
+        "format": "[{:%H:%M|%b.%d}]",
         "format-alt": "[ {:%a %d %b} ]",
         "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
         "on-click": "kitty --class calcurse -e calcurse"
@@ -213,7 +213,7 @@
         "interval": 300,
         "tooltip": true,
         "tooltip-format": "{text} pending pacman updates\nLeft click: run system update",
-        "on-click": "kitty --app-id=temp-terminal -e bash -lc 'sudo pacman -Syu; exec bash'"
+        "on-click": "kitty --app-id=temp-termina -e bash -lc 'sudo pacman -Syu; exec bash'"
     },
     "custom/notifications": {
         "format": "[ {text}]",

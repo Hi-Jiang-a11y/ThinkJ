@@ -1,0 +1,213 @@
+#!/bin/bash
+
+# watermark.sh — 使用 ImageMagick 給圖片打上文字水印（支援批量）
+# 用法:
+#   ./watermark.sh                    互動選擇模式
+#   ./watermark.sh image.jpg          單張
+#   ./watermark.sh 圖片1.jpg 圖片2.jpg  多張
+#   ./watermark.sh 資料夾/            整個資料夾
+
+set -euo pipefail
+
+die() { echo "錯誤: $1" >&2; exit 1; }
+command -v magick >/dev/null 2>&1 || die "未安裝 ImageMagick（請執行 sudo apt install imagemagick）"
+
+IMG_EXTS=("jpg" "jpeg" "png" "webp" "bmp" "tiff" "tif" "gif" "avif" "heic" "heif")
+
+# ── 全域水印參數（由互動輸入決定） ──
+font=""
+text="NeoJuliett"
+gravity="southeast"
+color="white"
+opacity=30
+pct=3                 # 字體大小 = 圖片寬度 × pct%
+
+# ── 自動檢測中文字型 ──
+detect_font() {
+    [[ -n "$font" ]] && return
+    for f in "Noto-Sans-CJK-SC" "Noto-Sans-SC" "WenQuanYi-Micro-Hei" \
+             "WenQuanYi-Zen-Hei" "DejaVu-Sans-Book"; do
+        if magick -list font 2>/dev/null | grep -qi "$f"; then
+            font="$f"
+            return
+        fi
+    done
+    font=$(magick -list font 2>/dev/null | grep 'Font:' | head -1 | sed 's/.*Font: //')
+    [[ -z "$font" ]] && die "找不到可用字型"
+}
+
+# ── 對單張圖片打水印 ──
+add_watermark() {
+    local input="$1" output="$2"
+
+    local w
+    w=$(magick identify -ping -format "%w" "$input")
+    local ps
+    ps=$(awk "BEGIN {printf \"%d\", $w * $pct / 100}")
+    [[ $ps -lt 16 ]] && ps=16
+    [[ $ps -gt 300 ]] && ps=300
+
+    # 顏色轉 rgba
+    local rgb fill
+    rgb=$(magick xc:"$color" -format "%[fx:255*r],%[fx:255*g],%[fx:255*b]" info: 2>/dev/null) || die "無法解析顏色: $color"
+    fill="rgba($rgb,$(awk "BEGIN {printf \"%.2f\", $opacity / 100}"))"
+
+    magick "$input" -auto-orient \
+        -font "$font" -pointsize "$ps" \
+        -fill "$fill" -gravity "$gravity" \
+        -annotate "+15+15" "$text" \
+        "$output"
+
+    echo "  > $output"
+}
+
+# ── 互動輸入水印參數（全域變數） ──
+input_watermark_settings() {
+    detect_font
+
+    read -r -p "- 水印文字（預設: NeoJuliett）: " text
+    [[ -z "$text" ]] && text="NeoJuliett"
+
+    echo "字體大小:  (1)小  (2)中  (3)大  (4)特大"
+    read -r -p "- 請選擇（預設 (2)中）: " size_lvl
+    [[ -z "$size_lvl" ]] && size_lvl=2
+    case "$size_lvl" in
+        1) pct=1.5 ;;
+        2) pct=3   ;;
+        3) pct=6   ;;
+        4) pct=10  ;;
+        *) pct=3   ;;
+    esac
+
+    cat << "POS"
+位置:
+  (7)左上  (8)中上  (9)右上
+  (4)左中  (5)正中  (6)右中
+  (1)左下  (2)中下  (3)右下
+POS
+read -r -p "- 請選擇（預設 (3)右下）: " pos
+    [[ -z "$pos" ]] && pos=3
+    case "$pos" in
+        7) gravity="northwest" ;;
+        8) gravity="north"     ;;
+        9) gravity="northeast" ;;
+        4) gravity="west"      ;;
+        5) gravity="center"    ;;
+        6) gravity="east"      ;;
+        1) gravity="southwest" ;;
+        2) gravity="south"     ;;
+        3) gravity="southeast" ;;
+        *) gravity="southeast" ;;
+    esac
+
+    read -r -p "- 顏色，名稱或 hex（預設: white）: " color
+    [[ -z "$color" ]] && color="white"
+
+    read -r -p "- 透明度 0-100（預設: 30）: " opacity
+    [[ -z "$opacity" ]] && opacity=30
+    [[ $opacity -lt 0 ]] && opacity=0
+    [[ $opacity -gt 100 ]] && opacity=100
+    return 0
+}
+
+# ── 判斷是否圖片檔 ──
+is_image() {
+    local ext="${1##*.}" lower
+    lower=$(echo "$ext" | tr '[:upper:]' '[:lower:]')
+    for e in "${IMG_EXTS[@]}"; do
+        [[ "$lower" == "$e" ]] && return 0
+    done
+    return 1
+}
+
+# ── 判斷模式 ──
+mode="single"
+files=()
+
+if [[ $# -eq 0 ]]; then
+    echo "選擇模式:  (1)單張  (2)整個資料夾  (3)指定多張圖片"
+    read -r -p "- 請選擇[預設 (1)單張]: " mode_choice
+    [[ -z "$mode_choice" ]] && mode_choice=1
+    case "$mode_choice" in
+        2) mode="folder" ;;
+        3) mode="list"   ;;
+        1) mode="single" ; read -r -p "- 請輸入圖片路徑: " f ; [[ -f "$f" ]] && files=("$f") || die "找不到圖片: $f" ;;
+        *) mode="single" ; read -r -p "- 請輸入圖片路徑: " f ; [[ -f "$f" ]] && files=("$f") || die "找不到圖片: $f" ;;
+    esac
+elif [[ $# -eq 1 && -d "$1" ]]; then
+    mode="folder"
+    folder="$1"
+elif [[ $# -eq 1 && -f "$1" ]]; then
+    mode="single"
+    files=("$1")
+else
+    mode="list"
+    for f in "$@"; do
+        [[ -f "$f" ]] && files+=("$f")
+    done
+    [[ ${#files[@]} -eq 0 ]] && die "沒有有效的圖片檔案"
+fi
+
+# ── 依模式收集檔案 ──
+case "$mode" in
+    folder)
+        [[ -z "${folder:-}" ]] && read -r -p "- 請輸入資料夾路徑: " folder
+        [[ -d "$folder" ]] || die "找不到資料夾: $folder"
+        read -r -p "- 是否遞迴子資料夾? (y/N): " recurse
+        if [[ "$recurse" =~ ^[Yy] ]]; then
+            while IFS= read -r -d '' f; do files+=("$f"); done < \
+                <(find "$folder" -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" -o -iname "*.webp" -o -iname "*.bmp" -o -iname "*.tiff" -o -iname "*.tif" -o -iname "*.gif" -o -iname "*.avif" -o -iname "*.heic" -o -iname "*.heif" \) -print0)
+        else
+            while IFS= read -r -d '' f; do files+=("$f"); done < \
+                <(find "$folder" -maxdepth 1 -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" -o -iname "*.webp" -o -iname "*.bmp" -o -iname "*.tiff" -o -iname "*.tif" -o -iname "*.gif" -o -iname "*.avif" -o -iname "*.heic" -o -iname "*.heif" \) -print0)
+        fi
+        [[ ${#files[@]} -eq 0 ]] && die "資料夾中沒有圖片"
+        echo "找到 ${#files[@]} 張圖片"
+
+        read -r -p "- 輸出目錄（留空則在原目錄產生 _wm 檔案）: " outdir
+        if [[ -n "$outdir" ]]; then
+            mkdir -p "$outdir"
+        fi
+        ;;
+
+    list)
+        if [[ ${#files[@]} -eq 0 ]]; then
+            echo "請輸入圖片路徑（每行一個，空白行結束）:"
+            while read -r line; do
+                [[ -z "$line" ]] && break
+                [[ -f "$line" ]] && files+=("$line") || echo "  ⚠ 跳過（不存在）: $line"
+            done
+        fi
+        [[ ${#files[@]} -eq 0 ]] && die "沒有有效的圖片檔案"
+        ;;
+esac
+
+# ── 輸入水印參數 ──
+input_watermark_settings
+
+echo ""
+echo "開始處理 ${#files[@]} 張圖片..."
+
+# ── 執行處理 ──
+for input in "${files[@]}"; do
+    dir=$(dirname "$input")
+    base=$(basename "$input")
+    name="${base%.*}"
+    ext="${base##*.}"
+
+    if [[ "$mode" == "folder" && -n "${outdir:-}" ]]; then
+        output="${outdir}/${name}_wm.${ext}"
+    else
+        output="${dir}/${name}_wm.${ext}"
+    fi
+
+    add_watermark "$input" "$output"
+done
+
+echo "> 全部處理完成"
+
+# ── 用 swayimg 開啟最後一張結果 ──
+if command -v swayimg >/dev/null 2>&1 && [[ -f "${output:-}" ]]; then
+    (sleep 0.3 && swayimg "$output") >/dev/null 2>&1 &
+    disown
+fi
