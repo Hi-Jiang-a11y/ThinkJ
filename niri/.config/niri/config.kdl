@@ -1,11 +1,9 @@
-// This config is in the KDL format: https://kdl.dev
-// "/-" comments out the following node.
-// Check the wiki for a full description of the configuration:
-// https://yalter.github.io/niri/Configuration:-Introduction
-// ===========================================================
-// Input device configuration.
-// Find the full list of options on the wiki:
-// https://yalter.github.io/niri/Configuration:-Input
+
+debug {
+      render-drm-device "/dev/dri/by-path/pci-0000:01:00.0-render"
+}
+
+prefer-no-csd
 
 input {
     keyboard {
@@ -21,7 +19,6 @@ input {
     touchpad {
         // tap
         dwt // Disable while typing
-        dwtp // Disable while using using touchpoint
         // drag false
         // drag-lock
         // natural-scroll
@@ -33,15 +30,14 @@ input {
 
     mouse {
         // natural-scroll
-        // accel-speed 0.2
-        // accel-profile "flat"
+        accel-profile "flat"
         // scroll-method "no-scroll"
     }
 
     trackpoint {
+        // off
         // natural-scroll
-        accel-speed 0.3
-        accel-profile "flat"
+        // accel-profile "flat"
         // scroll-method "on-button-down"
         // scroll-button 273
         // scroll-button-lock
@@ -61,7 +57,9 @@ input {
 // by running `niri msg outputs` while inside a niri instance.
 // The built-in laptop monitor is usually called "eDP-1".
 // Remember to uncomment the node by removing "/-"!
-output "eDP-1" {
+
+output "eDP-2" {
+    // Uncomment this line to disable this output.
     // off
 
     // Resolution and, optionally, refresh rate of the output.
@@ -70,10 +68,11 @@ output "eDP-1" {
     // for the resolution.
     // If the mode is omitted altogether or is invalid, niri will pick one automatically.
     // Run `niri msg outputs` while inside a niri instance to list all outputs and their modes.
-    mode "1920x1080@60.020"
+    mode "3200x2000@165.002"
+
 
     // You can use integer or fractional scale, for example use 1.5 for 150% scale.
-    scale 1.25
+    scale 2
 
     // Transform allows to rotate the output counter-clockwise, valid values are:
     // normal, 90, 180, 270, flipped, flipped-90, flipped-180 and flipped-270.
@@ -88,19 +87,49 @@ output "eDP-1" {
     // so to put another output directly adjacent to it on the right, set its x to 1920.
     // If the position is unset or results in an overlap, the output is instead placed
     // automatically.
-    // position x=1280 y=0
+    position x=0 y=0
+}
+
+output "DP-1" {
+    // Uncomment this line to disable this output.
+    // off
+
+    // Resolution and, optionally, refresh rate of the output.
+    // The format is "<width>x<height>" or "<width>x<height>@<refresh rate>".
+    // If the refresh rate is omitted, niri will pick the highest refresh rate
+    // for the resolution.
+    // If the mode is omitted altogether or is invalid, niri will pick one automatically.
+    // Run `niri msg outputs` while inside a niri instance to list all outputs and their modes.
+    mode "3840x2160@240.084"
+
+
+    // You can use integer or fractional scale, for example use 1.5 for 150% scale.
+    scale 1.75
+
+    // Transform allows to rotate the output counter-clockwise, valid values are:
+    // normal, 90, 180, 270, flipped, flipped-90, flipped-180 and flipped-270.
+    transform "normal"
+
+    // Position of the output in the global coordinate space.
+    // This affects directional monitor actions like "focus-monitor-left", and cursor movement.
+    // The cursor can only move between directly adjacent outputs.
+    // Output scale and rotation has to be taken into account for positioning:
+    // outputs are sized in logical, or scaled, pixels.
+    // For example, a 3840×2160 output with scale 2.0 will have a logical size of 1920×1080,
+    // so to put another output directly adjacent to it on the right, set its x to 1920.
+    // If the position is unset or results in an overlap, the output is instead placed
+    // automatically.
+    position x=-2194 y=0
+
+    variable-refresh-rate on-demand=true
 }
 
 // Settings that influence how windows are positioned and sized.
+
 layout {
     // Set gaps around windows in logical pixels.
-    gaps 0
-    // When to center a column when changing focus, options are:
-    // - "never", default behavior, focusing an off-screen column will keep at the left
-    //   or right edge of the screen.
-    // - "always", the focused column will always be centered.
-    // - "on-overflow", focusing a column will center it if it doesn't fit
-    //   together with the previously focused column.
+    gaps 5
+
     center-focused-column "never"
 
     // You can customize the widths that "switch-preset-column-width" (Mod+R) toggles between.
@@ -120,8 +149,9 @@ layout {
     // preset-window-heights { }
 
     // You can change the default width of the new windows.
-    // If you leave the brackets empty, the windows themselves will decide their initial width.
     default-column-width { proportion 0.5; }
+    // If you leave the brackets empty, the windows themselves will decide their initial width.
+    // default-column-width {}
 
     // By default focus ring and border are rendered as a solid background rectangle
     // behind windows. That is, they will show up through semitransparent windows.
@@ -134,21 +164,23 @@ layout {
     // Alternatively, you can override it with a window rule called
     // `draw-border-with-background`.
 
-    // {{{  Focus Ring
+    // You can change how the focus ring looks.
     focus-ring {
-        off
-
         // How many logical pixels the ring extends out from the windows.
-        width 5
+        width 3
+        // Colors can be set in a variety of ways:
+        // - CSS named colors: "red"
+        // - RGB hex: "#rgb", "#rgba", "#rrggbb", "#rrggbbaa"
+        // - CSS-like notation: "rgb(255, 127, 0)", rgba(), hsl() and a few others.
 
         // Color of the ring on the active monitor.
-        active-color "#EB59B6"
-
+        // active-color "#ffb6c1"
+        active-color "eb5ba1"
         // Color of the ring on inactive monitors.
         //
         // The focus ring only draws around the active window, so the only place
         // where you can see its inactive-color is on other monitors.
-        inactive-color "#077d35"
+        inactive-color "#505050"
 
         // You can also use gradients. They take precedence over solid colors.
         // Gradients are rendered the same as CSS linear-gradient(angle, from, to).
@@ -165,15 +197,16 @@ layout {
         //
         // inactive-gradient from="#505050" to="#808080" angle=45 relative-to="workspace-view"
     }
-    //}}}
-    // {{{ Border
+
+    // You can also add a border. It's similar to the focus ring, but always visible.
     border {
         // The settings are the same as for the focus ring.
         // If you enable the border, you probably want to disable the focus ring.
-        // off
+        off
 
         width 4
-        active-color "#ffb6c1"
+        // active-color "#ffc87f"
+        active-color "#228b22"
         inactive-color "#505050"
 
         // Color of the border around windows that request your attention.
@@ -186,9 +219,10 @@ layout {
 
         // inactive-gradient from="#505050" to="#808080" angle=45 relative-to="workspace-view"
     }
-    // }}}
+
     // You can enable drop shadows for windows.
     shadow {
+        // Uncomment the next line to enable shadows.
         on
 
         // By default, the shadow draws only around its window, and not behind it.
@@ -211,16 +245,16 @@ layout {
         // pixels and match the CSS box-shadow properties.
 
         // Softness controls the shadow blur radius.
-        softness 24
+        softness 20
 
         // Spread expands the shadow.
         spread 2
 
         // Offset moves the shadow relative to the window.
-        offset x=0 y=4
+        offset x=0 y=5
 
         // You can also change the shadow color and opacity.
-        color "#0006"
+        color "#0007"
     }
 
     // Struts shrink the area occupied by windows, similarly to layer-shell panels.
@@ -231,7 +265,6 @@ layout {
     struts {
         // left 64
         // right 64
-        top -1
         // top 64
         // bottom 64
     }
@@ -244,13 +277,6 @@ layout {
 
 // This line starts waybar, a commonly used bar for Wayland compositors.
 spawn-at-startup "waybar"
-
-// This line starts dunst, a lighweight notification-daemon
-spawn-at-startup "dunst"
-
-// Lock after 5 minutes of inactivity, turn displays off after 8 minutes,
-// and always lock before the system suspends.
-spawn-at-startup "swayidle" "-w" "timeout 300 'swaylock -f'" "timeout 480 'niri msg action power-off-monitors'" "resume 'niri msg action power-on-monitors'" "before-sleep 'swaylock -f'"
 
 // This line starts fcitx5
 spawn-at-startup "fcitx5"
@@ -277,7 +303,6 @@ hotkey-overlay {
 // If the client will specifically ask for CSD, the request will be honored.
 // Additionally, clients will be informed that they are tiled, removing some client-side rounded corners.
 // This option will also fix border/focus ring drawing behind some semitransparent windows.
-prefer-no-csd
 
 // You can change the path where screenshots are saved.
 // A ~ at the front will be expanded to the home directory.
@@ -324,7 +349,7 @@ window-rule {
 window-rule {
     match app-id=r#"^thunar$"#
     open-floating true
-    default-column-width  { proportion 0.5; }
+    default-column-width  { proportion 0.45; }
     default-window-height { fixed 480; }
     default-floating-position x=32 y=32 relative-to="bottom-left"
 }
@@ -339,8 +364,8 @@ window-rule {
 window-rule {
     match app-id=r#"^temp-terminal$"#
     open-floating true
-    default-column-width  { proportion 0.5; }
-    default-window-height { fixed 480; }
+    default-column-width  { proportion 0.4; }
+    default-window-height { fixed 450; }
     default-floating-position x=0 y=16 relative-to="top"
 }
 
@@ -356,10 +381,14 @@ window-rule {
     // block-out-from "screencast"
 }
 
-// Enable rounded corners for all windows.
 window-rule {
-    geometry-corner-radius 0
+    geometry-corner-radius 8
     clip-to-geometry true
+}
+
+window-rule {
+      match app-id="^Minecraft.*"
+      variable-refresh-rate true
 }
 
 binds {
@@ -394,8 +423,8 @@ binds {
     // The allow-when-locked=true property makes them work even when the session is locked.
     // Using spawn-sh allows to pass multiple arguments together with the command.
     // "-l 0.6" limits the volume to 60%.
-    XF86AudioRaiseVolume allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.05+ -l 1"; }
-    Shift+XF86AudioRaiseVolume allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.01+ -l 0.6"; }
+    XF86AudioRaiseVolume allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.05+ -l 0.8"; }
+    Shift+XF86AudioRaiseVolume allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.01+ -l 0.45"; }
 
 	XF86AudioLowerVolume allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.05-"; }
     Shift+XF86AudioLowerVolume allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.01-"; }
@@ -415,7 +444,7 @@ binds {
     // but you need to manually put each argument in separate "" quotes.
     XF86MonBrightnessUp allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "+5%"; }
     Shift+XF86MonBrightnessUp allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "+1%"; }
-    
+
 	XF86MonBrightnessDown allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "5%-"; }
     Shift+XF86MonBrightnessDown allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "1%-"; }
 
@@ -448,11 +477,19 @@ binds {
     Mod+Ctrl+Home { move-column-to-first; }
     Mod+Ctrl+End  { move-column-to-last; }
 
+    Mod+Shift+Left  { focus-monitor-left; }
+    Mod+Shift+Down  { focus-monitor-down; }
+    Mod+Shift+Up    { focus-monitor-up; }
+    Mod+Shift+Right { focus-monitor-right; }
     Mod+Shift+H     { focus-monitor-left; }
     Mod+Shift+J     { focus-monitor-down; }
     Mod+Shift+K     { focus-monitor-up; }
     Mod+Shift+L     { focus-monitor-right; }
 
+    Mod+Shift+Ctrl+Left  { move-column-to-monitor-left; }
+    Mod+Shift+Ctrl+Down  { move-column-to-monitor-down; }
+    Mod+Shift+Ctrl+Up    { move-column-to-monitor-up; }
+    Mod+Shift+Ctrl+Right { move-column-to-monitor-right; }
     Mod+Shift+Ctrl+H     { move-column-to-monitor-left; }
     Mod+Shift+Ctrl+J     { move-column-to-monitor-down; }
     Mod+Shift+Ctrl+K     { move-column-to-monitor-up; }
@@ -484,11 +521,18 @@ binds {
     Mod+Shift+U         { move-workspace-down; }
     Mod+Shift+I         { move-workspace-up; }
 
+    Mod+Shift+M { power-off-monitors; }
+
     Mod+Shift+V hotkey-overlay-title="Clipboard History" {
         spawn-sh "selection=$(cliphist list | fuzzel --dmenu --with-nth=2 --no-run-if-empty
         --prompt='Clipboard> '); [ -n \"$selection\" ] && printf '%s' \"$selection\" | cliphist decode |
         wl-copy"
     }
+
+    Mod+Shift+O hotkey-overlay-title="OCR Selected Area to Clipboard" {
+        spawn-sh "bash ~/.local/bin/ocr-selection";
+    }
+
     // You can bind mouse wheel scroll ticks using the following syntax.
     // These binds will change direction based on the natural-scroll setting.
     //
@@ -529,16 +573,24 @@ binds {
     //
     // For example, with 2 workspaces + 1 empty, indices 3, 4, 5 and so on
     // will all refer to the 3rd workspace.
-    Mod+0 { focus-workspace 1; }
-    Mod+9 { focus-workspace 2; }
-    Mod+8 { focus-workspace 3; }
-    Mod+7 { focus-workspace 4; }
-    Mod+6 { focus-workspace 5; }
-    Mod+Ctrl+0 { move-column-to-workspace 1; }
-    Mod+Ctrl+9 { move-column-to-workspace 2; }
-    Mod+Ctrl+8 { move-column-to-workspace 3; }
-    Mod+Ctrl+7 { move-column-to-workspace 4; }
-    Mod+Ctrl+6 { move-column-to-workspace 5; }
+    Mod+1 { focus-workspace 1; }
+    Mod+2 { focus-workspace 2; }
+    Mod+3 { focus-workspace 3; }
+    Mod+4 { focus-workspace 4; }
+    Mod+5 { focus-workspace 5; }
+    Mod+6 { focus-workspace 6; }
+    Mod+7 { focus-workspace 7; }
+    Mod+8 { focus-workspace 8; }
+    Mod+9 { focus-workspace 9; }
+    Mod+Ctrl+1 { move-column-to-workspace 1; }
+    Mod+Ctrl+2 { move-column-to-workspace 2; }
+    Mod+Ctrl+3 { move-column-to-workspace 3; }
+    Mod+Ctrl+4 { move-column-to-workspace 4; }
+    Mod+Ctrl+5 { move-column-to-workspace 5; }
+    Mod+Ctrl+6 { move-column-to-workspace 6; }
+    Mod+Ctrl+7 { move-column-to-workspace 7; }
+    Mod+Ctrl+8 { move-column-to-workspace 8; }
+    Mod+Ctrl+9 { move-column-to-workspace 9; }
 
     // Alternatively, there are commands to move just a single window:
     // Mod+Ctrl+1 { move-window-to-workspace 1; }
@@ -617,9 +669,7 @@ binds {
     Print { screenshot; }
     Ctrl+Print { screenshot-screen; }
     Alt+Print { screenshot-window; }
-    Mod+Shift+O hotkey-overlay-title="OCR Selected Area to Clipboard" {
-        spawn-sh "bash ~/.local/bin/ocr-selection";
-    }
+
 
     // Applications such as remote-desktop clients and software KVM switches may
     // request that niri stops processing the keyboard shortcuts defined here
@@ -632,9 +682,6 @@ binds {
     Mod+Escape allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
 
     // The quit action will show a confirmation dialog to avoid accidental exits.
-    Ctrl+Alt+Delete { quit; }
+    Mod+Backspace { quit; }
 
-    // Powers off the monitors. To turn them back on, do any input like
-    // moving the mouse or pressing any other key.
-    Mod+Shift+M { power-off-monitors; }
 }

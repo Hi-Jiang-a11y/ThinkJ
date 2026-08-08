@@ -4,6 +4,8 @@
 -- @since 2025,2026
 -- @modified by NeoJuliet (2026)
 
+
+
 vim.g.mapleader = ' '
 
 local function map(mode, keys, value)
