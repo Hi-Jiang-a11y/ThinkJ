@@ -2,7 +2,7 @@ indicator
 ignore-empty-password
 show-failed-attempts
 
-image=/home/Juliet/Pictures/WallPaper/133828092_p2_master1200.jpg
+image=/home/Juliet/.local/share/WallPaper/wallpaper1.png
 scaling=fill
 fade-in=0.2
 

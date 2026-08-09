@@ -30,18 +30,18 @@ tooltip label {
     min-width: 0;
     margin: 2px 0;
     padding: 0 2px;
-    color: #958b98;
+    color: #58546b;
     background: transparent;
 }
 
 #workspaces button:hover {
-    color: #d8d2dc;
+    color: #c4a7e7;
     background: transparent;
 }
 
 #workspaces button.focused,
 #workspaces button.active {
-    color: #d8d2dc;
+    color: #c4a7e7;
     background: transparent;
     box-shadow: none;
 }
@@ -78,71 +78,91 @@ tooltip label {
 }
 
 #clock {
-    color: #d8d2dc;
-}
-
-#backlight,
-#battery {
-    padding: 0 2px;
+    color: #e5c890;
 }
 
 #window {
-    color: #958b98;
+    color: #7c7794;
     font-size: 12px;
 }
 
 #custom-media {
-    color: #d8d2dc;
+    color: #cba6f7;
 }
 
 #custom-window-or-media {
-    color: #958b98;
+    color: #7c7794;
     font-size: 12px;
 }
 
-#cpu,
-#memory,
-#temperature,
-#disk,
-#backlight,
-#pulseaudio,
-#network,
+#cpu {
+    color: #81c8be;
+}
+
+#memory {
+    color: #89b4fa;
+}
+
+#temperature {
+    color: #a6d69a;
+}
+
+#disk {
+    color: #b6d6a8;
+}
+
+#backlight {
+    color: #f5d76e;
+}
+
+#pulseaudio {
+    color: #89b4fa;
+}
+
+#network {
+    color: #94e2d5;
+}
+
 #battery {
-    color: #d8d2dc;
+    color: #a6d69a;
 }
 
-#custom-updates,
-#custom-notifications,
+#custom-updates {
+    color: #fab387;
+}
+
+#custom-notifications {
+    color: #f9e2af;
+}
+
 #custom-clipboard {
-    color: #d8d2dc;
-}
-
-#pulseaudio.muted,
-#network.disconnected {
-    color: #d8d2dc;
+    color: #89dceb;
 }
 
 #idle_inhibitor {
-    color: #d8d2dc;
+    color: #7c7794;
 }
 
 #idle_inhibitor.activated {
-    color: #d8d2dc;
+    color: #a6e3a1;
     background: transparent;
 }
 
 #privacy,
 #privacy-item {
-    color: #ff6b8a;
+    color: #f38ba8;
 }
 
 #privacy-item {
     padding: 0 3px;
 }
 
-#temperature.critical,
+#temperature.critical {
+    color: #f38ba8;
+}
+
 #battery.warning:not(.charging) {
-    color: #ffb6c1;
+    color: #fab387;
 }
 
 @keyframes blink {
@@ -153,7 +173,7 @@ tooltip label {
 }
 
 #battery.critical:not(.charging) {
-    color: #ff6b8a;
+    color: #f38ba8;
     background: #2b151e;
     animation-name: blink;
     animation-duration: 0.9s;
@@ -176,10 +196,10 @@ tooltip label {
 }
 
 #custom-tray-toggle {
-    color: #d8d2dc;
+    color: #58546b;
     padding: 0 3px;
-    border-left: 1px solid #2b252d;
-    border-right: 1px solid #2b252d;
+    border-left: 1px solid #252233;
+    border-right: 1px solid #252233;
 }
 
 #tray > .passive {
