@@ -1,18 +1,23 @@
 [Default Applications]
-# General Files
-application/octet-stream=nvim-kitty.desktop;
-
-# URI Schemes
-x-scheme-handler/mihomo=mihomo-party.desktop
-x-scheme-handler/clash=mihomo-party.desktop
-
-# Web
+# URI schemes
+x-scheme-handler/mihomo=mihomo-party.desktop;
+x-scheme-handler/clash=mihomo-party.desktop;
 x-scheme-handler/http=firefox.desktop;
 x-scheme-handler/https=firefox.desktop;
+x-scheme-handler/mailto=eu.betterbird.Betterbird.desktop;
+
+# Web and documents
 text/html=firefox.desktop;
+application/pdf=firefox.desktop;
 
 # Text
 text/plain=org.kde.kate.desktop;
+text/markdown=typora.desktop;
+application/json=nvim-kitty.desktop;
+application/x-yaml=nvim-kitty.desktop;
+text/x-cmake=nvim-kitty.desktop;
+text/x-tex=texstudio.desktop;
+application/x-zerosize=org.kde.kate.desktop;
 
 # Images
 image/jpeg=swayimg.desktop;
@@ -26,24 +31,43 @@ audio/mpeg=mpv.desktop;
 audio/flac=mpv.desktop;
 audio/ogg=mpv.desktop;
 audio/x-wav=mpv.desktop;
+audio/vnd.wave=mpv.desktop;
 
 # Video
 video/mp4=mpv.desktop;
+video/mpeg=mpv.desktop;
+video/quicktime=mpv.desktop;
 video/webm=mpv.desktop;
 video/x-matroska=mpv.desktop;
+video/x-msvideo=mpv.desktop;
 
 # Directories
 inode/directory=thunar.desktop;
 
 [Added Associations]
 # Text
-text/markdown=io.typora.Typora.desktop;okularApplication_md.desktop;
-
-# General Files
-application/octet-stream=nvim-kitty.desktop;
+text/plain=nvim-kitty.desktop;vim.desktop;
+text/markdown=typora.desktop;nvim-kitty.desktop;okularApplication_md.desktop;
+application/json=nvim-kitty.desktop;vim.desktop;
+application/x-yaml=nvim-kitty.desktop;vim.desktop;
+text/x-cmake=nvim-kitty.desktop;vim.desktop;
+text/x-tex=texstudio.desktop;nvim-kitty.desktop;
 
 # Documents
-application/pdf=firefox.desktop;com.github.jeromerobert.pdfarranger.desktop;libreoffice-draw.desktop;okularApplication_pdf.desktop;
+application/pdf=firefox.desktop;okularApplication_pdf.desktop;com.github.jeromerobert.pdfarranger.desktop;libreoffice-draw.desktop;
 
-# Empty Files
-application/x-zerosize=org.kde.kate.desktop;
+# Images
+image/jpeg=swayimg.desktop;org.kde.gwenview.desktop;imv.desktop;firefox.desktop;
+image/png=swayimg.desktop;org.kde.gwenview.desktop;gimp.desktop;firefox.desktop;
+image/webp=swayimg.desktop;imv.desktop;feh.desktop;firefox.desktop;
+image/gif=swayimg.desktop;org.kde.gwenview.desktop;firefox.desktop;
+image/svg+xml=firefox.desktop;org.inkscape.Inkscape.desktop;imv.desktop;
+
+# Archives and packages
+application/vnd.android.package-archive=org.kde.ark.desktop;
+application/vnd.rar=org.kde.ark.desktop;
+
+[Removed Associations]
+# Do not treat archives or arbitrary binary data as directories/text files.
+inode/directory=org.kde.ark.desktop;
+application/octet-stream=vim.desktop;nvim-kitty.desktop;
