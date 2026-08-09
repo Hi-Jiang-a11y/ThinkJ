@@ -1,0 +1,4 @@
+com.github.reds.LogisimEvolution
+com.github.tchx84.Flatseal
+io.github.go_musicfox.go-musicfox
+org.gnome.gitlab.somas.Apostrophe
