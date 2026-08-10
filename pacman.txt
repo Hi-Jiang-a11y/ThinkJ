@@ -75,6 +75,7 @@ gimp
 git
 glmark2
 glow
+gnome-disk-utility
 gnuplot
 gnuradio
 gnuradio-companion
@@ -84,6 +85,7 @@ gsmartcontrol
 gtkwave
 guitarix
 gum
+gvfs
 gwenview
 hmcl
 htop
@@ -103,6 +105,7 @@ keyd
 kicad
 kicad-library
 kitty
+less
 lf
 lftp
 libinput-tools
@@ -153,6 +156,7 @@ openssh
 orchis-theme
 otf-aurulent-nerd
 pacman-contrib
+pacoloco
 pavucontrol
 pdfarranger
 perl-image-exiftool
@@ -169,6 +173,7 @@ powertop
 progress
 psensor
 pulseview
+pv
 python-bleak
 python-brotli
 python-matplotlib
@@ -220,6 +225,7 @@ texlive-xetex
 texstudio
 throne
 thunar
+thunar-volman
 tlp
 tlp-rdw
 toilet
