@@ -309,7 +309,7 @@ hotkey-overlay {
 // You can change the path where screenshots are saved.
 // A ~ at the front will be expanded to the home directory.
 // The path is formatted with strftime(3) to give you the screenshot date and time.
-screenshot-path "~/ScreenShots/SS%Y_%m_%d_%H:%M:%S.png"
+screenshot-path "~/screenshots/SS%Y_%m_%d_%H:%M:%S.png"
 
 // You can also set this to null to disable saving screenshots to disk.
 // screenshot-path null
@@ -369,6 +369,15 @@ window-rule {
     default-column-width  { proportion 0.4; }
     default-window-height { fixed 450; }
     default-floating-position x=0 y=16 relative-to="top"
+}
+
+// Keep GPG passphrase prompts compact and centered.
+// This matches the GTK, GNOME and Qt pinentry frontends.
+window-rule {
+    match app-id=r#"(?i)^pinentry(?:-.*)?$"#
+    open-floating true
+    default-column-width  { fixed 520; }
+    default-window-height { fixed 240; }
 }
 
 // Example: block out two password managers from screen capture.
