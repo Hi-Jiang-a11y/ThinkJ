@@ -1,7 +1,7 @@
 [Default Applications]
 # URI schemes
-x-scheme-handler/mihomo=mihomo-party.desktop;
-x-scheme-handler/clash=mihomo-party.desktop;
+x-scheme-handler/mihomo=mihomo-party.desktop
+x-scheme-handler/clash=mihomo-party.desktop
 x-scheme-handler/http=firefox.desktop;
 x-scheme-handler/https=firefox.desktop;
 x-scheme-handler/mailto=eu.betterbird.Betterbird.desktop;
