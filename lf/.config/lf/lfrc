@@ -14,14 +14,13 @@ set scrolloff 10
 # enable icons
 set icons true
 
-# idk
-set dircounts true
-
 # enable preview
 set preview true
 set previewer ~/.local/bin/lfpreviewer
 # list dircetories first
 set dirfirst true
+
+set info size:time
 
 set truncatepct 50
 
@@ -50,4 +49,4 @@ set ifs "\n"
 set cursorpreviewfmt "\033[7;2m"
 
 # timeformat
-set timefmt "Jan/02/2006"
+set timefmt "Jan/02/2006/15:04"

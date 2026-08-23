@@ -31,6 +31,7 @@ input {
     mouse {
         // natural-scroll
         accel-profile "flat"
+        accel-speed -0.1
         // scroll-method "no-scroll"
     }
 
@@ -363,6 +364,7 @@ window-rule {
 }
 
 // Only the dedicated scratch terminal floats; ordinary Kitty windows still tile.
+
 window-rule {
     match app-id=r#"^temp-terminal$"#
     open-floating true
@@ -371,6 +373,13 @@ window-rule {
     default-floating-position x=0 y=16 relative-to="top"
 }
 
+window-rule {
+    match app-id=r#"^temp-swayimg$"#
+    open-floating true
+    default-column-width  { proportion 0.5; }
+    default-window-height { fixed 700; }
+    // default-floating-position x=0 y=0
+}
 // Keep GPG passphrase prompts compact and centered.
 // This matches the GTK, GNOME and Qt pinentry frontends.
 window-rule {
