@@ -1,12 +1,3 @@
-// This config is in the KDL format: https://kdl.dev
-// "/-" comments out the following node.
-// Check the wiki for a full description of the configuration:
-// https://yalter.github.io/niri/Configuration:-Introduction
-// ===========================================================
-// Input device configuration.
-// Find the full list of options on the wiki:
-// https://yalter.github.io/niri/Configuration:-Input
-
 input {
     keyboard {
         repeat-rate 35
@@ -120,6 +111,7 @@ layout {
     // preset-window-heights { }
 
     // You can change the default width of the new windows.
+
     // If you leave the brackets empty, the windows themselves will decide their initial width.
     default-column-width { proportion 0.5; }
 
@@ -242,6 +234,10 @@ layout {
 // which may be more convenient to use.
 // See the binds section below for more spawn examples.
 
+// Make graphical session variables available to D-Bus/systemd services such as
+// xdg-desktop-portal, which provides browser file chooser dialogs.
+//spawn-sh-at-startup "systemctl --user set-environment XDG_CURRENT_DESKTOP=niri XDG_SESSION_DESKTOP=niri XDG_SESSION_TYPE=wayland; dbus-update-activation-environment --systemd WAYLAND_DISPLAY DISPLAY"
+
 // This line starts waybar, a commonly used bar for Wayland compositors.
 spawn-at-startup "waybar"
 
@@ -282,7 +278,7 @@ prefer-no-csd
 // You can change the path where screenshots are saved.
 // A ~ at the front will be expanded to the home directory.
 // The path is formatted with strftime(3) to give you the screenshot date and time.
-screenshot-path "~/ScreenShots/SS%Y_%m_%d_%H:%M:%S.png"
+screenshot-path "~/media/pics/ss/%Y%m%d_%H:%M:%S.png"
 
 // You can also set this to null to disable saving screenshots to disk.
 // screenshot-path null
@@ -322,7 +318,7 @@ window-rule {
 
 // File management and chat are short-lived utility windows in this workflow.
 window-rule {
-    match app-id=r#"^thunar$"#
+    match app-id=r#"(?i)^thunar$"#
     open-floating true
     default-column-width  { proportion 0.5; }
     default-window-height { fixed 480; }
@@ -342,6 +338,31 @@ window-rule {
     default-column-width  { proportion 0.5; }
     default-window-height { fixed 480; }
     default-floating-position x=0 y=16 relative-to="top"
+}
+
+window-rule {
+    match app-id=r#"^temp-swayimg$"#
+    open-floating true
+    default-column-width  { proportion 0.5; }
+    default-window-height { fixed 700; }
+    // default-floating-position x=0 y=0
+}
+
+// Videos opened from lf should float like its dedicated swayimg viewer.
+window-rule {
+    match app-id=r#"^temp-mpv$"#
+    open-floating true
+    default-column-width  { proportion 0.5; }
+    default-window-height { fixed 700; }
+    // default-floating-position x=0 y=0
+}
+// Keep GPG passphrase prompts compact and centered.
+// This matches the GTK, GNOME and Qt pinentry frontends.
+window-rule {
+    match app-id=r#"(?i)^pinentry(?:-.*)?$"#
+    open-floating true
+    default-column-width  { fixed 520; }
+    default-window-height { fixed 240; }
 }
 
 // Example: block out two password managers from screen capture.
@@ -383,6 +404,9 @@ binds {
         spawn "kitty" "--app-id" "temp-terminal" "--title" "Temporary Terminal";
     }
     Mod+D hotkey-overlay-title="Run an Application: fuzzel" { spawn "fuzzel"; }
+    Mod+Shift+N hotkey-overlay-title="Notification History" {
+        spawn "/home/Juliet/.local/bin/waybar-notifications" "show";
+    }
     Mod+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock"; }
 
     // Use spawn-sh to run a shell command. Do this if you need pipes, multiple commands, etc.
@@ -415,7 +439,7 @@ binds {
     // but you need to manually put each argument in separate "" quotes.
     XF86MonBrightnessUp allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "+5%"; }
     Shift+XF86MonBrightnessUp allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "+1%"; }
-    
+
 	XF86MonBrightnessDown allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "5%-"; }
     Shift+XF86MonBrightnessDown allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "1%-"; }
 
@@ -448,11 +472,18 @@ binds {
     Mod+Ctrl+Home { move-column-to-first; }
     Mod+Ctrl+End  { move-column-to-last; }
 
+    Mod+Shift+Left  { focus-monitor-left; }
+    Mod+Shift+Down  { focus-monitor-down; }
+    Mod+Shift+Up    { focus-monitor-up; }
+    Mod+Shift+Right { focus-monitor-right; }
     Mod+Shift+H     { focus-monitor-left; }
     Mod+Shift+J     { focus-monitor-down; }
     Mod+Shift+K     { focus-monitor-up; }
     Mod+Shift+L     { focus-monitor-right; }
-
+	Mod+Shift+Ctrl+Left  { move-column-to-monitor-left; }
+    Mod+Shift+Ctrl+Down  { move-column-to-monitor-down; }
+    Mod+Shift+Ctrl+Up    { move-column-to-monitor-up; }
+    Mod+Shift+Ctrl+Right { move-column-to-monitor-right; }
     Mod+Shift+Ctrl+H     { move-column-to-monitor-left; }
     Mod+Shift+Ctrl+J     { move-column-to-monitor-down; }
     Mod+Shift+Ctrl+K     { move-column-to-monitor-up; }
@@ -485,7 +516,7 @@ binds {
     Mod+Shift+I         { move-workspace-up; }
 
     Mod+Shift+V hotkey-overlay-title="Clipboard History" {
-        spawn-sh "selection=$(cliphist list | fuzzel --dmenu --with-nth=2 --no-run-if-empty
+        spawn-sh "selection=$(cliphist list | fuzzel --dmenu --with-nth=2 --no-run-if-empty --prompt='Clipboard> '
         --prompt='Clipboard> '); [ -n \"$selection\" ] && printf '%s' \"$selection\" | cliphist decode |
         wl-copy"
     }
@@ -632,7 +663,7 @@ binds {
     Mod+Escape allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
 
     // The quit action will show a confirmation dialog to avoid accidental exits.
-    Ctrl+Alt+Delete { quit; }
+    Mod+Backspace { quit; }
 
     // Powers off the monitors. To turn them back on, do any input like
     // moving the mouse or pressing any other key.

@@ -1,49 +1,38 @@
 [Default Applications]
-# General Files
 application/octet-stream=nvim-kitty.desktop;
-
-# URI Schemes
 x-scheme-handler/mihomo=mihomo-party.desktop
 x-scheme-handler/clash=mihomo-party.desktop
-
-# Web
 x-scheme-handler/http=firefox.desktop;
 x-scheme-handler/https=firefox.desktop;
+x-scheme-handler/mailto=eu.betterbird.Betterbird.desktop;
 text/html=firefox.desktop;
+application/pdf=firefox.desktop;
 
-# Text
-text/plain=org.kde.kate.desktop;
+text/plain=nvim-kitty.desktop;
+text/markdown=typora.desktop;
+application/json=nvim-kitty.desktop;
+application/x-yaml=nvim-kitty.desktop;
+text/x-cmake=nvim-kitty.desktop;
+text/x-tex=texstudio.desktop;
+application/x-zerosize=org.kde.kate.desktop;
 
-# Images
 image/jpeg=swayimg.desktop;
 image/png=swayimg.desktop;
 image/webp=swayimg.desktop;
 image/gif=swayimg.desktop;
 image/svg+xml=firefox.desktop;
-
-# Audio
 audio/mpeg=mpv.desktop;
 audio/flac=mpv.desktop;
 audio/ogg=mpv.desktop;
 audio/x-wav=mpv.desktop;
-
-# Video
 video/mp4=mpv.desktop;
 video/webm=mpv.desktop;
 video/x-matroska=mpv.desktop;
-
-# Directories
 inode/directory=thunar.desktop;
 
 [Added Associations]
-# Text
 text/markdown=io.typora.Typora.desktop;okularApplication_md.desktop;
-
-# General Files
 application/octet-stream=nvim-kitty.desktop;
-
-# Documents
 application/pdf=firefox.desktop;com.github.jeromerobert.pdfarranger.desktop;libreoffice-draw.desktop;okularApplication_pdf.desktop;
-
-# Empty Files
 application/x-zerosize=org.kde.kate.desktop;
+image/jpeg=firefox.desktop;
