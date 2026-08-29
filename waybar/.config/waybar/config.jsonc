@@ -84,7 +84,7 @@
     },
     "custom/tray-toggle": {
         "format": "[]",
-        "tooltip": false
+        "tooltip-format": "click to expand"
     },
     "group/tray": {
         "orientation": "horizontal",
@@ -103,7 +103,7 @@
         "format": "[{:%H:%M|%b.%d}]",
         "format-alt": "[ {:%a %d %b} ]",
         "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
-        "on-click": "kitty --class calcurse -e calcurse"
+        "on-click-right": "kitty --class temp-terminal -e calcurse"
     },
     "cpu": {
         "interval": 30,
@@ -129,7 +129,7 @@
         "path": "/home",
         "format": "[HOME {percentage_used}%]",
         "tooltip-format": "{used} used of {total} ({percentage_used}%)",
-        "on-click": "kitty --class btop -e btop"
+        "on-click": "kitty --class=temp-terminal --hold -e duf -hide special -sort usage"
     },
     "backlight": {
         "format": "[ {percent}%]",
@@ -160,8 +160,7 @@
         "format-linked": "[󰈀 ]",
         "format-disconnected": "[󰖪 ]",
         "format-alt": "[{ifname}: {ipaddr}/{cidr}]",
-        "on-click": "nm-connection-editor",
-        "on-click-right": "kitty --class nmtui -e nmtui"
+        "on-click-right": "nm-connection-editor"
     },
     "pulseaudio": {
         "scroll-step": 2,
@@ -213,7 +212,7 @@
         "interval": 300,
         "tooltip": true,
         "tooltip-format": "{text} pending pacman updates\nLeft click: run system update",
-        "on-click": "kitty --app-id=temp-termina -e bash -lc 'sudo pacman -Syu; exec bash'"
+        "on-click": "kitty --app-id=temp-terminal -e bash -lc 'sudo pacman -Syu; exec bash'"
     },
     "custom/notifications": {
         "format": "[ {text}]",

@@ -85,7 +85,7 @@ def show_history():
     notifications = history()
     entries = []
     notification_ids = []
-    for notification in reversed(notifications):
+    for notification in notifications:
         notification_id = field(notification, "id")
         if not notification_id:
             continue
