@@ -11,12 +11,12 @@ clock
 indicator-radius=120
 indicator-thickness=8
 
-ring-color=9d4eddcc
-ring-clear-color=9d4eddcc
+ring-color=ffffffff
+ring-clear-color=dddddddd
 ring-ver-color=80ed99cc
 ring-wrong-color=ff4d6dcc
 
-key-hl-color=c77dffcc
+key-hl-color=000000ff
 bs-hl-color=ff4d6dcc
 
 inside-color=1e1e2ecc
@@ -34,4 +34,3 @@ text-wrong-color=ff4d6dff
 
 layout-bg-color=00000000
 layout-text-color=cfd8dcff
-

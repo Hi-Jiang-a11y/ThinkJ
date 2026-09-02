@@ -56,3 +56,5 @@ set cursorpreviewfmt "\033[7;2m"
 
 # timeformat
 set timefmt "Jan/02/2006/15:04"
+
+%[ $LF_LEVEL -eq 1 ] || printf '\033[41;97m Warning: Nested lf Instance! \033[0m\n'

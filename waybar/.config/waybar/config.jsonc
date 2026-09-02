@@ -169,7 +169,7 @@
         "format-bluetooth-muted": "[{icon} 󰝟 ]",
         "format-muted": "[ ]",
         "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
-        "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle",
+        "on-click-right": "pavucontrol",
         "format-icons": {
             "headphone": " ",
             "hands-free": " ",
