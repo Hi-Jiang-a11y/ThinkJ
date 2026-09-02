@@ -21,7 +21,6 @@ LOCK_PATH = RUNTIME_DIR / "media-key-double-tap.lock"
 async def playerctl(action: str) -> None:
     process = await asyncio.create_subprocess_exec(
         "playerctl",
-        "--player=spotify,mpv",
         action,
         stdin=subprocess.DEVNULL,
         stdout=subprocess.DEVNULL,
