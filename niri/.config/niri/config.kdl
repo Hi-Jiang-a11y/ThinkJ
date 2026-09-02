@@ -165,7 +165,7 @@ layout {
         // off
 
         width 4
-        active-color "#ffb6c1"
+        active-color "#cdcdcd"
         inactive-color "#505050"
 
         // Color of the border around windows that request your attention.
@@ -250,6 +250,9 @@ spawn-at-startup "swayidle" "-w" "timeout 300 'swaylock -f'" "timeout 480 'niri 
 
 // This line starts fcitx5
 spawn-at-startup "fcitx5"
+
+// Track the most recently active MPRIS player (Spotify, mpv-mpris, etc.).
+spawn-at-startup "playerctld" "daemon"
 
 // Keep text and image clipboard history, then update Waybar's CLIP count.
 spawn-sh-at-startup "wl-paste --type text --watch sh -c 'cliphist store && pkill -RTMIN+8 -x waybar'"
@@ -429,7 +432,8 @@ binds {
 
     // Media keys mapping using playerctl.
     // This will work with any MPRIS-enabled media player.
-    XF86AudioPlay        allow-when-locked=true { spawn-sh "playerctl play-pause"; }
+    // Single press: play/pause. Double press within 350 ms: next track.
+    XF86AudioPlay        allow-when-locked=true repeat=false { spawn "~/.local/bin/media-key-double-tap"; }
     XF86AudioStop        allow-when-locked=true { spawn-sh "playerctl stop"; }
     XF86AudioPrev        allow-when-locked=true { spawn-sh "playerctl previous"; }
     XF86AudioNext        allow-when-locked=true { spawn-sh "playerctl next"; }
