@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+# Start ModelSim Intel FPGA Starter Edition
+MODELSIM_SOURCE_FILE="/etc/profile.d/modelsim-ase.sh"
+
+if [[ ! -x "$MODELSIM_SOURCE_FILE" ]]; then
+    echo "Err: Cannot find ModelSim Source File：$MODELSIM_SOURCE_FILE" >&2
+    exit 1
+fi
+
+source $MODELSIM_SOURCE_FILE
+exec "vsim"
