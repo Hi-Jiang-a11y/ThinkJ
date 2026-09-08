@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+# Capture a selected screen region, recognize QR code,
+# then copy the result to the Wayland clipboard.
+
+set -u
+
+tmp=$(mktemp --suffix=.png)
+trap 'rm -f "$tmp"' EXIT
+
+area=$(slurp) || exit 0
+
+# Capture selected area
+grim -g "$area" "$tmp"
+
+# Recognize QR code
+url=$(zbarimg --quiet --raw "$tmp" 2>/dev/null)
+
+if [ -z "$url" ]; then
+    notify-send -a QR_Scanner -u critical \
+        "QR Scan Failed" \
+        "No QR Code Found"
+    exit 1
+fi
+
+# Copy result to clipboard
+printf '%s' "$url" | wl-copy
+
+notify-send -a QR_Scanner \
+    "URL saved to clipboard" \
+    "$url"

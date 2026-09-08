@@ -60,7 +60,7 @@ vim.o.tabstop = 4 -- 4 spaces per <Tab>
 vim.o.shiftwidth =4 --4 spaces per indentation level
 vim.o.smartindent = true -- indentation is aware of newline insert
 vim.o.wrap = true
-
+vim.opt.foldmethod = "marker" -- set default foldmethod: marker
 vim.o.splitbelow = true -- horizontal splits will automatically be below
 vim.o.splitright = true -- vertical splits will automatically be to the right
 
@@ -71,11 +71,11 @@ function _G.MyTabLine()
     local is_sel = (i == vim.fn.tabpagenr())
     s = s .. (is_sel and '%#TabLineSel#' or '%#TabLine#')
     s = s .. '%' .. i .. 'T'
-    
+
     local bufnr = vim.fn.tabpagebuflist(i)[vim.fn.tabpagewinnr(i)]
     local name = vim.fn.bufname(bufnr)
     name = (name == '') and '[No Name]' or vim.fn.fnamemodify(name, ':t')
-    
+
     s = s .. ' ' .. i .. ':' .. name .. ' '
   end
   return s .. '%#TabLineFill#%T'
