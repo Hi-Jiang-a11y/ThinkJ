@@ -1,3 +1,4 @@
+// {{{ inputs
 input {
     keyboard {
         repeat-rate 35
@@ -47,7 +48,31 @@ input {
     // Setting max-scroll-amount="0%" makes it work only on windows already fully on screen.
     focus-follows-mouse max-scroll-amount="0%"
 }
+// }}}
+// {{{ gestures
+gestures {
+    dnd-edge-view-scroll {
+        trigger-width 30
+        delay-ms 100
+        max-speed 1500
+    }
 
+    dnd-edge-workspace-switch {
+        trigger-height 50
+        delay-ms 100
+        max-speed 1500
+    }
+
+    hot-corners {
+        // off
+        top-left
+        // top-right
+        // bottom-left
+        // bottom-right
+    }
+}
+// }}}
+// {{{ outputs
 // You can configure outputs by their name, which you can find
 // by running `niri msg outputs` while inside a niri instance.
 // The built-in laptop monitor is usually called "eDP-1".
@@ -81,10 +106,10 @@ output "eDP-1" {
     // automatically.
     // position x=1280 y=0
 }
+// }}}
 
-// Settings that influence how windows are positioned and sized.
+// {{{ layout
 layout {
-    // Set gaps around windows in logical pixels.
     gaps 0
     // When to center a column when changing focus, options are:
     // - "never", default behavior, focusing an off-screen column will keep at the left
@@ -179,6 +204,7 @@ layout {
         // inactive-gradient from="#505050" to="#808080" angle=45 relative-to="workspace-view"
     }
     // }}}
+    // {{{ shadow
     // You can enable drop shadows for windows.
     shadow {
         on
@@ -227,8 +253,11 @@ layout {
         // top 64
         // bottom 64
     }
+    // }}}
 }
+// }}}
 
+// {{{ spawn-at-startup
 // Add lines like this to spawn processes at startup.
 // Note that running niri as a session supports xdg-desktop-autostart,
 // which may be more convenient to use.
@@ -266,11 +295,7 @@ spawn-sh-at-startup "swaybg -i ~/.local/share/thinkpad_wallpaper.jpg -m fill"
 
 // To run a shell command (with variables, pipes, etc.), use spawn-sh-at-startup:
 // spawn-sh-at-startup "qs -c ~/source/qs/MyAwesomeShell"
-
-hotkey-overlay {
-    // Uncomment this line to disable the "Important Hotkeys" pop-up at startup.
-    // skip-at-startup
-}
+// }}}
 
 // Uncomment this line to ask the clients to omit their client-side decorations if possible.
 // If the client will specifically ask for CSD, the request will be honored.
@@ -300,6 +325,7 @@ animations {
 // Find more information on the wiki:
 // https://yalter.github.io/niri/Configuration:-Window-Rules
 
+// {{{ window rules
 // Work around WezTerm's initial configure bug
 // by setting an empty default-column-width.
 window-rule {
@@ -385,7 +411,9 @@ window-rule {
     geometry-corner-radius 0
     clip-to-geometry true
 }
+// }}}
 
+// {{{ key bindings
 binds {
     // Keys consist of modifiers separated by + signs, followed by an XKB key name
     // in the end. To find an XKB name for a particular key, you may use a program
@@ -455,6 +483,8 @@ binds {
     Mod+Q repeat=false { close-window; }
 
     Mod+H     { focus-column-left; }
+    MouseForward  { focus-column-right; }
+    MouseBack { focus-column-left; }
     Mod+J     { focus-window-down; }
     Mod+K     { focus-window-up; }
     Mod+L     { focus-column-right; }
@@ -640,6 +670,7 @@ binds {
     // Windows in this column will appear as vertical tabs,
     // rather than stacked on top of each other.
     Mod+V { toggle-column-tabbed-display; }
+    Mod+MouseForward { toggle-column-tabbed-display; }
 
     // Actions to switch layouts.
     // Note: if you uncomment these, make sure you do NOT have
@@ -673,3 +704,4 @@ binds {
     // moving the mouse or pressing any other key.
     Mod+Shift+M { power-off-monitors; }
 }
+// }}}
