@@ -483,8 +483,6 @@ binds {
     Mod+Q repeat=false { close-window; }
 
     Mod+H     { focus-column-left; }
-    MouseForward  { focus-column-right; }
-    MouseBack { focus-column-left; }
     Mod+J     { focus-window-down; }
     Mod+K     { focus-window-up; }
     Mod+L     { focus-column-right; }
@@ -670,7 +668,10 @@ binds {
     // Windows in this column will appear as vertical tabs,
     // rather than stacked on top of each other.
     Mod+V { toggle-column-tabbed-display; }
-    Mod+MouseForward { toggle-column-tabbed-display; }
+    Mod+MouseForward { consume-window-into-column; }
+    Mod+MouseBack { expel-window-from-column; }
+    MouseForward { focus-window-up; }
+    MouseBack    { focus-window-down; }
 
     // Actions to switch layouts.
     // Note: if you uncomment these, make sure you do NOT have
