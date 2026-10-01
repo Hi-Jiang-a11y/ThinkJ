@@ -207,7 +207,7 @@ layout {
     // {{{ shadow
     // You can enable drop shadows for windows.
     shadow {
-        on
+        // on
 
         // By default, the shadow draws only around its window, and not behind it.
         // Uncomment this setting to make the shadow draw behind its window.
@@ -267,6 +267,7 @@ layout {
 // xdg-desktop-portal, which provides browser file chooser dialogs.
 //spawn-sh-at-startup "systemctl --user set-environment XDG_CURRENT_DESKTOP=niri XDG_SESSION_DESKTOP=niri XDG_SESSION_TYPE=wayland; dbus-update-activation-environment --systemd WAYLAND_DISPLAY DISPLAY"
 
+spawn-at-startup "niri" "msg" "action" "focus-workspace" "main"
 // This line starts waybar, a commonly used bar for Wayland compositors.
 spawn-at-startup "waybar"
 
@@ -296,6 +297,8 @@ spawn-sh-at-startup "swaybg -i ~/.local/share/thinkpad_wallpaper.jpg -m fill"
 // To run a shell command (with variables, pipes, etc.), use spawn-sh-at-startup:
 // spawn-sh-at-startup "qs -c ~/source/qs/MyAwesomeShell"
 // }}}
+workspace "scratch"
+workspace "main"
 
 // Uncomment this line to ask the clients to omit their client-side decorations if possible.
 // If the client will specifically ask for CSD, the request will be honored.
@@ -411,6 +414,30 @@ window-rule {
     geometry-corner-radius 0
     clip-to-geometry true
 }
+
+window-rule {
+    match app-id=r#"telegram"#
+    open-floating true
+    default-column-width { proportion 0.6; }
+    default-window-height { fixed 600; }
+    default-floating-position x=32 y=32 relative-to="top-left"
+}
+
+window-rule {
+    match app-id=r#"Spotify"#
+    open-floating true
+    default-column-width { proportion 0.5; }
+    default-window-height { fixed 100; }
+    default-floating-position x=32 y=32 relative-to="bottom-right"
+}
+
+window-rule {
+    match app-id=r#"^ncmpcpp-scratch$"#
+    open-floating true
+    default-column-width { proportion 0.7; }
+    default-window-height { fixed 500; }
+    default-floating-position x=22 y=22 relative-to="bottom-left"
+}
 // }}}
 
 // {{{ key bindings
@@ -430,11 +457,13 @@ binds {
     Mod+Shift+Slash { show-hotkey-overlay; }
 
     // Suggested binds for running programs: terminal, app launcher, screen locker.
-    Mod+T hotkey-overlay-title="Open a Terminal: Kitty" { spawn "kitty"; }
+    Mod+N { spawn "thunar"; }
+    Mod+M { spawn "kitty" "--app-id" "temp-terminal" "--hold" "--execute" "lf"; }
+    Mod+T { spawn "kitty"; }
     Mod+Shift+T hotkey-overlay-title="Open a Floating Temporary Terminal" {
         spawn "kitty" "--app-id" "temp-terminal" "--title" "Temporary Terminal";
     }
-    Mod+D hotkey-overlay-title="Run an Application: fuzzel" { spawn "fuzzel"; }
+    Mod+D { spawn "fuzzel"; }
     Mod+Shift+N hotkey-overlay-title="Notification History" {
         spawn "/home/Juliet/.local/bin/waybar-notifications" "show";
     }
@@ -592,16 +621,6 @@ binds {
     //
     // For example, with 2 workspaces + 1 empty, indices 3, 4, 5 and so on
     // will all refer to the 3rd workspace.
-    Mod+0 { focus-workspace 1; }
-    Mod+9 { focus-workspace 2; }
-    Mod+8 { focus-workspace 3; }
-    Mod+7 { focus-workspace 4; }
-    Mod+6 { focus-workspace 5; }
-    Mod+Ctrl+0 { move-column-to-workspace 1; }
-    Mod+Ctrl+9 { move-column-to-workspace 2; }
-    Mod+Ctrl+8 { move-column-to-workspace 3; }
-    Mod+Ctrl+7 { move-column-to-workspace 4; }
-    Mod+Ctrl+6 { move-column-to-workspace 5; }
 
     // Alternatively, there are commands to move just a single window:
     // Mod+Ctrl+1 { move-window-to-workspace 1; }
@@ -670,6 +689,8 @@ binds {
     Mod+V { toggle-column-tabbed-display; }
     Mod+MouseForward { consume-window-into-column; }
     Mod+MouseBack { expel-window-from-column; }
+    Mod+Ctrl+MouseForward { move-window-up; }
+    Mod+Ctrl+MouseBack { move-window-down; }
     MouseForward { focus-window-up; }
     MouseBack    { focus-window-down; }
 
@@ -704,5 +725,16 @@ binds {
     // Powers off the monitors. To turn them back on, do any input like
     // moving the mouse or pressing any other key.
     Mod+Shift+M { power-off-monitors; }
+
+    Mod+Ctrl+T repeat=false {
+        spawn "nscratch" "-id" "org.telegram.desktop" "-s" "Telegram";
+    }
+    Mod+Ctrl+S repeat=false {
+        spawn "nscratch" "-id" "Spotify" "-s" "spotify-launcher";
+    }
+    Mod+Ctrl+N repeat=false {
+        spawn "nscratch" "-id" "ncmpcpp-scratch" "-s" "kitty --app-id ncmpcpp-scratch --title ncmpcpp ncmpcpp";
+    }
+
 }
 // }}}
