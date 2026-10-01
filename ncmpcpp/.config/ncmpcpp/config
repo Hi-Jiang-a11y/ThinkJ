@@ -1,0 +1,77 @@
+# ncmpcpp — compact Vim/lf-friendly setup
+mpd_host = localhost
+mpd_port = 6600
+mpd_music_dir = $XDG_MUSIC_DIR
+
+# Screens and layout
+startup_screen = playlist
+playlist_display_mode = columns
+playlist_show_remaining_time = no
+header_visibility = yes
+statusbar_visibility = yes
+titles_visibility = yes
+display_bitrate = yes
+display_volume_level = yes
+display_remaining_time = no
+clock_display_seconds = no
+message_delay_time = 2
+
+# Clean dark terminal appearance
+user_interface = classic
+centered_cursor = yes
+autocenter_mode = yes
+cyclic_scrolling = yes
+header_text_scrolling = yes
+song_columns_list_format = (4f)[153]{NE} (24)[152]{a} (42)[183]{t|f:Title} (18)[181]{b} (7f)[151]{l}
+song_list_format = {$b%t$/b}|{$8%f$9} $R{$7%a$9}
+song_status_format = {$b{%a - }{%t}}|{%f}
+current_item_prefix = $(223)$r=> $/r$(end)
+current_item_suffix = $(end)
+current_item_inactive_column_prefix = $(153)$r
+current_item_inactive_column_suffix = $/r$(end)
+selected_item_prefix = $(181)> $(end)
+selected_item_suffix = $(end)
+now_playing_prefix = $(152)$b
+now_playing_suffix = $/b$(end)
+progressbar_look = ==
+alternative_header_first_line_format = $(153)$b== %t|%f$(end)
+alternative_header_second_line_format = $(152)%a$(end){ - $(181)%b$(end)}
+
+# MPD FIFO visualizer (must match the output name in mpd.conf)
+visualizer_data_source = /tmp/mpd.fifo
+visualizer_output_name = Visualizer feed
+visualizer_in_stereo = yes
+visualizer_type = spectrum
+visualizer_fps = 60
+visualizer_autoscale = yes
+visualizer_spectrum_smooth_look = yes
+visualizer_spectrum_smooth_look_legacy_chars = yes
+visualizer_spectrum_dft_size = 2
+visualizer_spectrum_gain = 6
+visualizer_spectrum_log_scale_x = yes
+visualizer_spectrum_log_scale_y = yes
+visualizer_color = 152, 153, 181, 223
+
+# Cyan / magenta terminal palette
+colors_enabled = yes
+main_window_color = 250
+header_window_color = 153
+volume_color = 152
+state_line_color = 153
+state_flags_color = 223:b
+statusbar_color = 250
+statusbar_time_color = 152
+player_state_color = 223:b
+progressbar_color = 152:b
+progressbar_elapsed_color = 151:b
+alternative_ui_separator_color = 153
+window_border_color = 153
+active_window_border = 181
+empty_tag_color = 250
+# Lyrics and metadata
+lyrics_directory = ~/.lyrics
+follow_now_playing_lyrics = yes
+fetch_lyrics_for_current_song_in_background = yes
+ignore_leading_the = yes
+
+execute_on_song_change = ncmpcpp_songinfo

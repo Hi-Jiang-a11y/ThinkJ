@@ -22,6 +22,11 @@ export XDG_CACHE_HOME="$HOME/.cache"
 export XDG_DATA_HOME="$HOME/.local/share"
 export XDG_STATE_HOME="$HOME/.local/state"
 
+if [[ -r "$XDG_CONFIG_HOME/user-dirs.dirs" ]]; then
+    . "$XDG_CONFIG_HOME/user-dirs.dirs"
+    export XDG_MUSIC_DIR
+fi
+
 export npm_config_cache="$XDG_CACHE_HOME/npm"
 export OLLAMA_MODELS="$XDG_DATA_HOME/ollama/models"
 
