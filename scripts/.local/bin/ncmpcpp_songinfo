@@ -7,4 +7,10 @@ previewname="$previewdir/$(mpc --format %album% current | base64).png"
 
 [ -e "$previewname" ] || ffmpeg -y -i "$filename" -an -vf scale=128:128 "$previewname" > /dev/null 2>&1
 
-notify-send -r 27072 "Now Playing" "$(mpc --format '%title% \n%artist% - %album%' current)" -i "$previewname"
+# Tag this notification so counters can exclude music changes.  The marker is
+# timestamped and read by Waybar; unlike notify-send --wait, this stays
+# asynchronous so ncmpcpp is not blocked while the notification is visible.
+ncmpcpp_marker="${XDG_RUNTIME_DIR:-/tmp}/ncmpcpp-notification-active"
+touch "$ncmpcpp_marker"
+
+notify-send -a ncmpcpp -r 27072 "Now Playing" "$(mpc --format '%title% \n%artist% - %album%' current)" -i "$previewname"

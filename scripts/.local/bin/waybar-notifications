@@ -2,6 +2,7 @@
 """Event-driven Dunst notification counter and history picker for Waybar."""
 
 import json
+import os
 import signal
 import subprocess
 import sys
@@ -44,13 +45,25 @@ def field(notification, name):
     return str(value).replace("\n", " ").replace("\t", " ").strip()
 
 
+def is_ncmpcpp(notification):
+    # appname is the primary identifier; summary is a fallback for older
+    # dunst/notify-send combinations that report the generic app name.
+    return (
+        field(notification, "appname").lower() == "ncmpcpp"
+        or field(notification, "summary") == "Now Playing"
+    )
+
+
 def pending_count():
     displayed = dunstctl("count", "displayed")
     try:
         active = int(displayed.stdout.strip()) if displayed.returncode == 0 else 0
     except ValueError:
         active = 0
-    return active + len(history())
+    marker = os.path.join(os.environ.get("XDG_RUNTIME_DIR", "/tmp"), "ncmpcpp-notification-active")
+    if os.path.exists(marker):
+        active = max(0, active - 1)
+    return active + sum(not is_ncmpcpp(item) for item in history())
 
 
 def print_count():
@@ -87,7 +100,7 @@ def show_history():
     notification_ids = []
     for notification in notifications:
         notification_id = field(notification, "id")
-        if not notification_id:
+        if not notification_id or is_ncmpcpp(notification):
             continue
         app = field(notification, "appname")
         summary = field(notification, "summary") or "(no title)"

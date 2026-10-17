@@ -46,3 +46,5 @@ if [[ -d /usr/share/pico-sdk ]]; then
 fi
 
 [[ -r "$HOME/.bashrc" ]] && . "$HOME/.bashrc"
+
+export QSYS_ROOTDIR="/home/Juliet/.cache/yay/quartus-free/pkg/quartus-free-quartus/opt/intelFPGA/25.1/quartus/sopc_builder/bin"
