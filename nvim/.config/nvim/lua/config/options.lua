@@ -61,6 +61,8 @@ vim.o.shiftwidth =4 --4 spaces per indentation level
 vim.o.smartindent = true -- indentation is aware of newline insert
 vim.o.wrap = true
 vim.opt.foldmethod = "marker" -- set default foldmethod: marker
+vim.o.foldlevel = 99 -- keep folds open by default
+vim.o.foldlevelstart = 99 -- open folds when a buffer is first opened
 vim.o.splitbelow = true -- horizontal splits will automatically be below
 vim.o.splitright = true -- vertical splits will automatically be to the right
 

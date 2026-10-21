@@ -424,10 +424,10 @@ window-rule {
 }
 
 window-rule {
-    match app-id=r#"Spotify"#
+    match app-id=r#"cider"#
     open-floating true
-    default-column-width { proportion 0.5; }
-    default-window-height { fixed 100; }
+    default-column-width { proportion 0.7; }
+    default-window-height { fixed 600; }
     default-floating-position x=32 y=32 relative-to="bottom-right"
 }
 
@@ -730,7 +730,7 @@ binds {
         spawn "nscratch" "-id" "org.telegram.desktop" "-s" "Telegram";
     }
     Mod+Ctrl+S repeat=false {
-        spawn "nscratch" "-id" "Spotify" "-s" "spotify-launcher";
+        spawn "nscratch" "-id" "cider" "-s" "flatpak run sh.cider.Cider";
     }
     Mod+Ctrl+N repeat=false {
         spawn "nscratch" "-id" "ncmpcpp-scratch" "-s" "kitty --app-id ncmpcpp-scratch --title ncmpcpp ncmpcpp";

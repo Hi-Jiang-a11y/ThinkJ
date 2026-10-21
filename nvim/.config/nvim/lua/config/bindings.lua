@@ -12,6 +12,19 @@ end
 
 map('n', '<leader>q', ':q!<CR>')
 map('n', '<leader>b', ':buffers<CR>')
+map('n', '<C-n>', '<C-d>')
+map('n', '<C-p>', '<C-u>')
+local function hover_or_diagnostic()
+  for _, client in ipairs(vim.lsp.get_clients({ bufnr = 0 })) do
+    if client.server_capabilities.hoverProvider then
+      vim.lsp.buf.hover()
+      return
+    end
+  end
+  vim.diagnostic.open_float(nil, { focus = false })
+end
+
+map('n', 'K', hover_or_diagnostic)
 
 -- move multi-lines
 map('v', 'J', ":m '>+1<CR>gv=gv")
@@ -63,7 +76,7 @@ map('n', '<leader>w', ':set wrap!<CR>')
 map('n', '<leader>h', ':set hlsearch!<CR>')
 map('n', '<leader>n', ':set relativenumber!<CR>')
 
-map('n', '<leader>f', ':FZF<CR>')
+map('n', '<leader>f', ':tabnew | FZF ..<CR>')
 
 -- terminal
 map('n', '<leader>t', ':tabnew | terminal<CR>i')

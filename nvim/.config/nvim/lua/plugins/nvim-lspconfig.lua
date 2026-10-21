@@ -16,6 +16,15 @@ return {
 
       vim.lsp.enable("lua_ls")
 
+      vim.lsp.config("verible", {
+        cmd = { "verible-verilog-ls" },
+        filetypes = { "verilog", "systemverilog" },
+        root_markers = { ".git" },
+        capabilities = capabilities,
+      })
+
+      vim.lsp.enable("verible")
+
     end,
   },
 }
