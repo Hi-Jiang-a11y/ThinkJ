@@ -1,3 +1,2 @@
-com.github.reds.LogisimEvolution
-io.typora.Typora
-org.telegram.desktop
+com.qq.QQ
+sh.cider.Cider
