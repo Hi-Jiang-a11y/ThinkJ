@@ -7,7 +7,6 @@ x-scheme-handler/https=firefox.desktop;
 x-scheme-handler/mailto=eu.betterbird.Betterbird.desktop;
 text/html=firefox.desktop;
 application/pdf=firefox.desktop;
-
 text/plain=nvim-kitty.desktop;
 text/markdown=typora.desktop;
 application/json=nvim-kitty.desktop;
@@ -15,7 +14,6 @@ application/x-yaml=nvim-kitty.desktop;
 text/x-cmake=nvim-kitty.desktop;
 text/x-tex=texstudio.desktop;
 application/x-zerosize=org.kde.kate.desktop;
-
 image/jpeg=swayimg.desktop;
 image/png=swayimg.desktop;
 image/webp=swayimg.desktop;
@@ -36,3 +34,4 @@ application/octet-stream=nvim-kitty.desktop;
 application/pdf=firefox.desktop;com.github.jeromerobert.pdfarranger.desktop;libreoffice-draw.desktop;okularApplication_pdf.desktop;
 application/x-zerosize=org.kde.kate.desktop;
 image/jpeg=firefox.desktop;
+image/tiff=org.kde.gwenview.desktop;
