@@ -27,6 +27,8 @@ video/mp4=mpv.desktop;
 video/webm=mpv.desktop;
 video/x-matroska=mpv.desktop;
 inode/directory=thunar.desktop;
+text/x-processing=processing-pde.desktop
+x-scheme-handler/pde=processing-pde.desktop
 
 [Added Associations]
 text/markdown=io.typora.Typora.desktop;okularApplication_md.desktop;

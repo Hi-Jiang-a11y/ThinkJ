@@ -726,13 +726,13 @@ binds {
     // moving the mouse or pressing any other key.
     Mod+Shift+M { power-off-monitors; }
 
-    Mod+Ctrl+T repeat=false {
+    Mod+Alt+T repeat=false {
         spawn "nscratch" "-id" "org.telegram.desktop" "-s" "Telegram";
     }
-    Mod+Ctrl+S repeat=false {
+    Mod+Alt+M repeat=false {
         spawn "nscratch" "-id" "cider" "-s" "flatpak run sh.cider.Cider";
     }
-    Mod+Ctrl+N repeat=false {
+    Mod+Alt+N repeat=false {
         spawn "nscratch" "-id" "ncmpcpp-scratch" "-s" "kitty --app-id ncmpcpp-scratch --title ncmpcpp ncmpcpp";
     }
 
