@@ -276,7 +276,7 @@ spawn-at-startup "dunst"
 
 // Lock after 5 minutes of inactivity, turn displays off after 8 minutes,
 // and always lock before the system suspends.
-spawn-at-startup "swayidle" "-w" "timeout 300 'swaylock -f'" "timeout 480 'niri msg action power-off-monitors'" "resume 'niri msg action power-on-monitors'" "before-sleep 'swaylock -f'"
+spawn-at-startup "swayidle" "-w" "timeout" "300" "swaylock -f" "timeout" "480" "niri msg action power-off-monitors" "resume" "niri msg action power-on-monitors" "before-sleep" "swaylock -f"
 
 // This line starts fcitx5
 spawn-at-startup "fcitx5"
@@ -438,6 +438,15 @@ window-rule {
     default-window-height { fixed 500; }
     default-floating-position x=22 y=22 relative-to="bottom-left"
 }
+
+window-rule {
+    match app-id=r#"QQ"#
+    open-floating true
+    default-column-width { proportion 0.5; }
+    default-window-height { fixed 500; }
+    default-floating-position x=32 y=32 relative-to="top-right"
+}
+
 // }}}
 
 // {{{ key bindings
@@ -462,6 +471,9 @@ binds {
     Mod+T { spawn "kitty"; }
     Mod+Shift+T hotkey-overlay-title="Open a Floating Temporary Terminal" {
         spawn "kitty" "--app-id" "temp-terminal" "--title" "Temporary Terminal";
+    }
+    Mod+Shift+C hotkey-overlay-title="Open Codex" {
+        spawn "kitty" "--hold" "--execute" "codex";
     }
     Mod+D { spawn "fuzzel"; }
     Mod+Shift+N hotkey-overlay-title="Notification History" {
@@ -734,6 +746,9 @@ binds {
     }
     Mod+Alt+N repeat=false {
         spawn "nscratch" "-id" "ncmpcpp-scratch" "-s" "kitty --app-id ncmpcpp-scratch --title ncmpcpp ncmpcpp";
+    }
+    Mod+Alt+O repeat=false {
+        spawn "nscratch" "-id" "QQ" "-s" "flatpak run com.qq.QQ";
     }
 
 }

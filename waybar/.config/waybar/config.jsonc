@@ -6,8 +6,7 @@
     "autohide-blocked": "false",
     "exclusive": "true",
     "passthrough": "false",
-    "spacing": 0, // Gaps between modules
-    // Choose the order of the modules
+    "spacing": 0,
     "modules-left": [
         "niri/workspaces",
         "clock",
@@ -17,14 +16,11 @@
         "temperature",
         "niri/window"
     ],
-    "modules-center": [
-        "custom/media"
-    ],
     "modules-right": [
+        "custom/media",
         "idle_inhibitor",
         "privacy",
         "custom/notifications",
-        "custom/updates",
         "custom/clipboard",
         "backlight",
         "pulseaudio",
@@ -45,40 +41,13 @@
         "tooltip-format": "{app}: {title}"
     },
     "niri/window": {
-        "format": "[ {} ]",
+        "format": "[{}]",
         "max-length": 56,
-        "separate-outputs": false
-    },
-    "mpd": {
-        "format": "{stateIcon} {consumeIcon}{randomIcon}{repeatIcon}{singleIcon}{artist} - {album} - {title} ({elapsedTime:%M:%S}/{totalTime:%M:%S}) ⸨{songPosition}|{queueLength}⸩ {volume}% ",
-        "format-disconnected": "Disconnected ",
-        "format-stopped": "{consumeIcon}{randomIcon}{repeatIcon}{singleIcon}Stopped ",
-        "unknown-tag": "N/A",
-        "interval": 1,
-        "consume-icons": {
-            "on": " "
-        },
-        "random-icons": {
-            "off": "<span color=\"#f53c3c\"></span> ",
-            "on": " "
-        },
-        "repeat-icons": {
-            "on": " "
-        },
-        "single-icons": {
-            "on": "1 "
-        },
-        "state-icons": {
-            "paused": "",
-            "playing": ""
-        },
-        "tooltip-format": "MPD (connected)",
-        "tooltip-format-disconnected": "MPD (disconnected)"
+        "separate-outputs": true
     },
     "tray": {
         "spacing": 4
         // "icons": {
-        //   "blueman": "bluetooth",
         //   "TelegramDesktop": "$HOME/.local/share/icons/hicolor/16x16/apps/telegram.png"
         // }
     },
@@ -206,14 +175,6 @@
         ],
         "ignore-monitor": true
     },
-    "custom/updates": {
-        "format": "[ {text}]",
-        "exec": "pacman -Qu | wc -l",
-        "interval": 300,
-        "tooltip": true,
-        "tooltip-format": "{text} pending pacman updates\nLeft click: run system update",
-        "on-click": "kitty --app-id=temp-terminal -e bash -lc 'sudo pacman -Syu; exec bash'"
-    },
     "custom/notifications": {
         "format": "[ {text}]",
         "exec": "/home/Juliet/.local/bin/waybar-notifications monitor",
@@ -233,10 +194,10 @@
         "on-click-right": "cliphist wipe"
     },
     "custom/media": {
-        "format": "[ {text} ]",
+        "format": "{text}",
         "max-length": 28,
         "hide-empty-text": true,
-        "exec": "if [ \"$(playerctl status 2>/dev/null)\" = Playing ]; then playerctl metadata --format ' {{artist}} — {{title}}'; fi",
+        "exec": "playerctl metadata --format ' {{artist}} — {{title}}' 2>/dev/null",
         "interval": 2,
         "on-click": "playerctl play-pause",
         "on-click-right": "playerctl stop",
