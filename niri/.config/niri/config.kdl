@@ -265,7 +265,7 @@ layout {
 
 // Make graphical session variables available to D-Bus/systemd services such as
 // xdg-desktop-portal, which provides browser file chooser dialogs.
-//spawn-sh-at-startup "systemctl --user set-environment XDG_CURRENT_DESKTOP=niri XDG_SESSION_DESKTOP=niri XDG_SESSION_TYPE=wayland; dbus-update-activation-environment --systemd WAYLAND_DISPLAY DISPLAY"
+spawn-sh-at-startup "systemctl --user set-environment XDG_CURRENT_DESKTOP=niri XDG_SESSION_DESKTOP=niri XDG_SESSION_TYPE=wayland; dbus-update-activation-environment --systemd WAYLAND_DISPLAY DISPLAY"
 
 spawn-at-startup "niri" "msg" "action" "focus-workspace" "main"
 // This line starts waybar, a commonly used bar for Wayland compositors.
