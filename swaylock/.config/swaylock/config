@@ -1,6 +1,7 @@
 indicator
-ignore-empty-password
 show-failed-attempts
+
+ignore-empty-password
 
 image=/home/Juliet/.local/share/thinkpad_wallpaper.jpg
 scaling=fill

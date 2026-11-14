@@ -124,9 +124,9 @@
     "network": {
         // "interface": "wlp2*", // (Optional) To force the use of this interface
         "format-wifi": "[ {signalStrength}%]",
-        "format-ethernet": "[󰈀 ]",
+        "format-ethernet": "[ ]",
         "tooltip-format": "{ifname} via {gwaddr}  ",
-        "format-linked": "[󰈀 ]",
+        "format-linked": "[ ]",
         "format-disconnected": "[󰖪 ]",
         "format-alt": "[{ifname}: {ipaddr}/{cidr}]",
         "on-click-right": "nm-connection-editor"
